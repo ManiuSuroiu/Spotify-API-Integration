@@ -8,20 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		8B1419291F1F32B700DD3CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1419281F1F32B700DD3CE1 /* AppDelegate.swift */; };
-		8B14192B1F1F32B700DD3CE1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14192A1F1F32B700DD3CE1 /* ViewController.swift */; };
+		8B14192B1F1F32B700DD3CE1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14192A1F1F32B700DD3CE1 /* SearchViewController.swift */; };
 		8B14192E1F1F32B700DD3CE1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B14192C1F1F32B700DD3CE1 /* Main.storyboard */; };
 		8B1419301F1F32B700DD3CE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B14192F1F1F32B700DD3CE1 /* Assets.xcassets */; };
 		8B1419331F1F32B700DD3CE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B1419311F1F32B700DD3CE1 /* LaunchScreen.storyboard */; };
+		8BEFD2861F23D11800685C52 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEFD2851F23D11800685C52 /* SearchResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8B1419251F1F32B700DD3CE1 /* Vibe Snippet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vibe Snippet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B1419281F1F32B700DD3CE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8B14192A1F1F32B700DD3CE1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8B14192A1F1F32B700DD3CE1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		8B14192D1F1F32B700DD3CE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8B14192F1F1F32B700DD3CE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B1419321F1F32B700DD3CE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B1419341F1F32B700DD3CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BEFD2851F23D11800685C52 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,11 +57,12 @@
 			isa = PBXGroup;
 			children = (
 				8B1419281F1F32B700DD3CE1 /* AppDelegate.swift */,
-				8B14192A1F1F32B700DD3CE1 /* ViewController.swift */,
+				8B14192A1F1F32B700DD3CE1 /* SearchViewController.swift */,
 				8B14192C1F1F32B700DD3CE1 /* Main.storyboard */,
 				8B14192F1F1F32B700DD3CE1 /* Assets.xcassets */,
 				8B1419311F1F32B700DD3CE1 /* LaunchScreen.storyboard */,
 				8B1419341F1F32B700DD3CE1 /* Info.plist */,
+				8BEFD2851F23D11800685C52 /* SearchResult.swift */,
 			);
 			path = "Vibe Snippet";
 			sourceTree = "<group>";
@@ -137,7 +140,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B14192B1F1F32B700DD3CE1 /* ViewController.swift in Sources */,
+				8B14192B1F1F32B700DD3CE1 /* SearchViewController.swift in Sources */,
+				8BEFD2861F23D11800685C52 /* SearchResult.swift in Sources */,
 				8B1419291F1F32B700DD3CE1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,6 +306,7 @@
 				8B1419391F1F32B700DD3CE1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -12,6 +12,8 @@ class SearchResult {
   
   var name = ""
   var artistName = ""
+  var popularity = 0.0
+  var previewURL = ""
 }
 
 

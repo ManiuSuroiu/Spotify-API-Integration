@@ -17,6 +17,7 @@ class SearchViewController: UIViewController {
   // MARK: Properties
   var searchResults: [SearchResult] = []
   var hasSearched = false
+  var isLoading = false
   
   let clientID = "ea45394e87614af5b7a2c50dc67ff77d"
   let clientSecret = "53e0bdead8a34e74bd2d6c1cec425dab"
@@ -27,6 +28,7 @@ class SearchViewController: UIViewController {
   struct TableViewCellIdentifiers {
     static let searchResultCell = "SearchResultCell"
     static let nothingFoundCell = "NothingFoundCell"
+    static let loadingCell = "LoadingCell"
   }
   
   override func viewDidLoad() {
@@ -43,6 +45,9 @@ class SearchViewController: UIViewController {
     
     cellNib = UINib(nibName: TableViewCellIdentifiers.nothingFoundCell, bundle: nil)
     tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.nothingFoundCell)
+    
+    cellNib = UINib(nibName: TableViewCellIdentifiers.loadingCell, bundle: nil)
+    tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.loadingCell)
   }
 
   override func didReceiveMemoryWarning() {
@@ -118,7 +123,7 @@ class SearchViewController: UIViewController {
     
     /* Configure the request */
     let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-    let urlString = String(format: "https://api.spotify.com/v1/search?q=%@&type=track", escapedSearchText)
+    let urlString = String(format: "https://api.spotify.com/v1/search?q=%@&type=track&limit=50", escapedSearchText)
     let url = URL(string: urlString)
     
     let request = NSMutableURLRequest(url: url!)
@@ -142,6 +147,11 @@ class SearchViewController: UIViewController {
         let jsonDictionary = self.parse(json: jsonData),
         let itemsArray = self.parse(dictionary: jsonDictionary) {
         self.searchResults = self.parse(items: itemsArray)
+        
+        DispatchQueue.main.async {
+          self.isLoading = false
+          self.tableView.reloadData()
+        }
       }
     }
     task.resume()
@@ -233,13 +243,14 @@ extension SearchViewController: UISearchBarDelegate {
     if !searchBar.text!.isEmpty {
       searchBar.resignFirstResponder()
       hasSearched = true
+      isLoading = true
+      tableView.reloadData()
       searchResults = []
       
       spotifyRequestAuthorization() { (success, accessToken) in
         if success {
           self.accessToken = accessToken
           self.performSpotifySearch(searchText: searchBar.text!)
-          self.tableView.reloadData()
           return
         }
       }
@@ -257,7 +268,9 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    if !hasSearched {
+    if isLoading {
+      return 1
+    } else if !hasSearched {
       return 0
     } else if searchResults.count == 0 {
       return 1
@@ -268,8 +281,19 @@ extension SearchViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    if searchResults.count == 0 {
+    // Handling the three possible scenarios:
+    /* 1. Returns one cell, the LoadingCell, showing the user that data is being retrieved from the Spotify server */
+    if isLoading {
+      let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.loadingCell, for: indexPath)
+      let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
+      spinner.startAnimating()
+      return cell
+      
+    /* 2. Also returns one cell, the NothingFoundCell, showing the user that no data matches her search */
+    } else if searchResults.count == 0 {
       return tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.nothingFoundCell, for: indexPath)
+    
+      /* 3.Returns cells populated with searchResult objects, upon a successful search */
     } else {
       let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.searchResultCell, for: indexPath) as! SearchResultCell
       let searchResult = searchResults[indexPath.row]
@@ -289,7 +313,7 @@ extension SearchViewController: UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    if searchResults.count == 0 {
+    if searchResults.count == 0 || isLoading {
       return nil
     } else {
       return indexPath

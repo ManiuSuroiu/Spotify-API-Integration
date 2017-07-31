@@ -39,7 +39,7 @@ class SearchViewController: UIViewController {
     /* Add a 64-point margin at the top of the table view, so the search bar doesn't obscure the first row */
     tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
     
-    /* Use the nib SearchResultCell or NothingFoundCell, whichever is appropriate for the situation */
+    /* Use the nib SearchResultCell, NothingFoundCell or LoadingCell, whichever is appropriate for the situation */
     var cellNib = UINib(nibName: TableViewCellIdentifiers.searchResultCell, bundle: nil)
     tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.searchResultCell)
     
@@ -74,43 +74,38 @@ class SearchViewController: UIViewController {
     let bodyParameter = "grant_type=client_credentials"
     request.httpBody = bodyParameter.data(using: .utf8)
     
-    
     /* Make the request */
     
     let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
       
-      /* GUARD: Was there an error? */
-      guard (error == nil) else {
+      /* Was there an error? */
+      if let error = error {
         print("There was an error with your request: \(String(describing: error))")
-        return
+      
+      /* Did the status code returned a successful 200 response? */
+      } else if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
+      
+      /* If yes, unwrap the data object for 'data' parameter, call the parse(json:) on it to get the top-level dictionary where the 'access_token' sits */
+        if let jsonData = data, let jsonDictionary = self.parse(json: jsonData) {
+          /* Get the access token from dictionary */
+          if let accessTokenString = jsonDictionary["access_token"] as? String {
+            completionHandlerForToken(true, accessTokenString)
+            return
+          }
+        }
+      
+      /* If the status code was other than 200 print the response from the server to get more details */
+      } else {
+        print("Failure: \(String(describing: response))")
       }
       
-      /* Check for a http error and, if there is one, get the status code for that error */
-      if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode != 200 {
-        print("Your request returned a status code: \(statusCode)")
+      /* Update the UI on the main thread and display an error to the user in case any of the above goes wrong. This code should never get executed upon a successful request */
+      DispatchQueue.main.async {
+        self.hasSearched = false
+        self.isLoading = false
+        self.tableView.reloadData()
+        self.showNetworkError()
       }
-      
-      /* GUARD: Was there any data returned */
-      guard let data = data else {
-        print("No data was returned by the request!")
-        return
-      }
-      
-      /* Parse the data */
-      var parsedResult: [String: AnyObject] = [:]
-      do {
-        parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: AnyObject]
-      } catch {
-        print("Could not parse the data as JSON: '\(data)'")
-        return
-      }
-      
-      /* GUARD: Get the access token from dictionary */
-      guard let accessTokenString = parsedResult["access_token"] as? String else {
-        print("Could not find key 'access_token' in \(parsedResult)")
-        return
-      }
-      completionHandlerForToken(true, accessTokenString)
     }
     task.resume()
   }
@@ -135,19 +130,26 @@ class SearchViewController: UIViewController {
     
     let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
       
+      /* GUARD: Was there an error? */
       guard (error == nil) else {
         print("There was an error with your request: \(String(describing: error))")
         return
       }
       
-      /* Check for a http error and parse the JSON */
-      if let statusCode = (response as? HTTPURLResponse)?.statusCode,
-        statusCode == 200,
+      /* Did the status code returned a successful 200 response? */
+      if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200,
+        
+        /* If yes unwrap the data, call the parse(json:) on it to get the top level dictionary */
         let jsonData = data,
         let jsonDictionary = self.parse(json: jsonData),
+        
+        /* Call parse(dictionary:) on the top level dictionary to get the 'items' array where all the necessary data to populate the UI sits */
         let itemsArray = self.parse(dictionary: jsonDictionary) {
+        
+        /* Call parse(items:) on the items array to get the data needed and assign it to searchResults properties */
         self.searchResults = self.parse(items: itemsArray)
         
+        /* Update the UI on the main thread: hide the activity indicator cell and reload all the data from searchResults into the table view */
         DispatchQueue.main.async {
           self.isLoading = false
           self.tableView.reloadData()
@@ -222,7 +224,7 @@ class SearchViewController: UIViewController {
   }
 
   
-  // MARK: Show network error to the user
+  // MARK: Show a network error alert to the user
   func showNetworkError() {
     let alert = UIAlertController(title: "Whoops...",
                                   message: "There was an error reading from Spotify. Please try again.",

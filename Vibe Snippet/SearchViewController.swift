@@ -14,10 +14,11 @@ class SearchViewController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var searchBar: UISearchBar!
   
-  // MARK: Properties
+  // MARK: Instance Variables
   var searchResults: [SearchResult] = []
   var hasSearched = false
   var isLoading = false
+  var dataTask: URLSessionDataTask?
   
   let clientID = "ea45394e87614af5b7a2c50dc67ff77d"
   let clientSecret = "53e0bdead8a34e74bd2d6c1cec425dab"
@@ -76,12 +77,13 @@ class SearchViewController: UIViewController {
     
     /* Make the request */
     
-    let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+    dataTask = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
       
       /* Was there an error? */
-      if let error = error {
+      if let error = error as NSError?, error.code == -999 {
         print("There was an error with your request: \(String(describing: error))")
-      
+        return
+        
       /* Did the status code returned a successful 200 response? */
       } else if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
       
@@ -107,7 +109,7 @@ class SearchViewController: UIViewController {
         self.showNetworkError()
       }
     }
-    task.resume()
+    dataTask?.resume()
   }
   
   // MARK: Search through Spotify
@@ -128,7 +130,7 @@ class SearchViewController: UIViewController {
     
     /* Make the request */
     
-    let task = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+    dataTask = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
       
       /* GUARD: Was there an error? */
       guard (error == nil) else {
@@ -156,7 +158,7 @@ class SearchViewController: UIViewController {
         }
       }
     }
-    task.resume()
+    dataTask?.resume()
   }
   
   // MARK: Parse the JSON
@@ -244,9 +246,12 @@ extension SearchViewController: UISearchBarDelegate {
     
     if !searchBar.text!.isEmpty {
       searchBar.resignFirstResponder()
-      hasSearched = true
+      
+      dataTask?.cancel()
       isLoading = true
       tableView.reloadData()
+      
+      hasSearched = true
       searchResults = []
       
       spotifyRequestAuthorization() { (success, accessToken) in

@@ -13,6 +13,7 @@ class SearchViewController: UIViewController {
   // MARK: IBOutlets
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var searchBar: UISearchBar!
+  @IBOutlet weak var segmentedControl: UISegmentedControl!
   
   // MARK: Instance Variables
   var searchResults: [SearchResult] = []
@@ -32,13 +33,19 @@ class SearchViewController: UIViewController {
     static let loadingCell = "LoadingCell"
   }
   
+  // MARK: IBActions
+  @IBAction func segmentChanged(_ sender: UISegmentedControl) {
+    performSearch()
+  }
+  
+  // MARK: ViewDidLoad
   override func viewDidLoad() {
     super.viewDidLoad()
     searchBar.becomeFirstResponder()
     tableView.rowHeight = 80
     
     /* Add a 64-point margin at the top of the table view, so the search bar doesn't obscure the first row */
-    tableView.contentInset = UIEdgeInsets(top: 64, left: 0, bottom: 0, right: 0)
+    tableView.contentInset = UIEdgeInsets(top: 108, left: 0, bottom: 0, right: 0)
     
     /* Use the nib SearchResultCell, NothingFoundCell or LoadingCell, whichever is appropriate for the situation */
     var cellNib = UINib(nibName: TableViewCellIdentifiers.searchResultCell, bundle: nil)
@@ -58,7 +65,7 @@ class SearchViewController: UIViewController {
   
   // MARK: Spotify Request Authorization
   
-  func spotifyRequestAuthorization(_ completionHandlerForToken: @escaping (_ success: Bool, _ accessToken: String?) -> Void) {
+  func requestAuthorizationFromSpotify(_ completionHandlerForToken: @escaping (_ success: Bool, _ accessToken: String?) -> Void) {
     
     /* TASK: Request authorization in order to obtain an access token needed to access the Spotify WEB API */
     
@@ -114,13 +121,24 @@ class SearchViewController: UIViewController {
   
   // MARK: Search through Spotify
   
-  func performSpotifySearch(searchText: String) {
+  func performSpotifySearch(searchText: String, category: Int) {
     
     /* TASK: Implement the 'search' Spotify API endpoint to return information about artists, tracks, albums or playlists */
     
     /* Configure the request */
     let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-    let urlString = String(format: "https://api.spotify.com/v1/search?q=%@&type=track&limit=50", escapedSearchText)
+    
+    var entityName: String
+    
+    switch category {
+    case 0: entityName = "track"
+    case 1: entityName = "artist"
+    case 2: entityName = "album"
+    case 3: entityName = "playlist"
+    default: entityName = ""
+    }
+    
+    let urlString = String(format: "https://api.spotify.com/v1/search?q=%@&type=%@&limit=50", escapedSearchText, entityName)
     let url = URL(string: urlString)
     
     let request = NSMutableURLRequest(url: url!)
@@ -148,8 +166,9 @@ class SearchViewController: UIViewController {
         /* Call parse(dictionary:) on the top level dictionary to get the 'items' array where all the necessary data to populate the UI sits */
         let itemsArray = self.parse(dictionary: jsonDictionary) {
         
-        /* Call parse(items:) on the items array to get the data needed and assign it to searchResults properties */
+        /* Call parse(items:) on the items array to get the data needed and assign it to searchResults properties. Sort the search alphabetically (by the track name). */
         self.searchResults = self.parse(items: itemsArray)
+        self.searchResults.sort(by: <)
         
         /* Update the UI on the main thread: hide the activity indicator cell and reload all the data from searchResults into the table view */
         DispatchQueue.main.async {
@@ -236,17 +255,15 @@ class SearchViewController: UIViewController {
     
     present(alert, animated: true, completion: nil)
   }
-}
-
-// MARK: UISearchBarDelegate
-
-extension SearchViewController: UISearchBarDelegate {
   
-  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+  // MARK: Perform a search - necessary because it needs to be called from two different places, searchBarSearchButtonClicked() and the segmentChanged() IBAction so when the user switches to a different type (ie 'album' or 'playlist') the app performs a new search with the specified type in the URL
+  func performSearch() {
     
+    /* Checks for the search bar not to be empty */
     if !searchBar.text!.isEmpty {
       searchBar.resignFirstResponder()
       
+      /* Cancels any previous requests so in case the user has a bad network connection, she won't be able to start two simultaneous requests */
       dataTask?.cancel()
       isLoading = true
       tableView.reloadData()
@@ -254,14 +271,24 @@ extension SearchViewController: UISearchBarDelegate {
       hasSearched = true
       searchResults = []
       
-      spotifyRequestAuthorization() { (success, accessToken) in
+      /* Request an access token from Spotify, if obtained assign it to the 'accessToken' instance variable and use it to perform a search through Spotify */
+      requestAuthorizationFromSpotify() { (success, accessToken) in
         if success {
           self.accessToken = accessToken
-          self.performSpotifySearch(searchText: searchBar.text!)
+          self.performSpotifySearch(searchText: self.searchBar.text!, category: self.segmentedControl.selectedSegmentIndex)
           return
         }
       }
     }
+  }
+}
+
+// MARK: UISearchBarDelegate
+
+extension SearchViewController: UISearchBarDelegate {
+  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    performSearch()
   }
   
   /* Merges the status bar area with the search bar */

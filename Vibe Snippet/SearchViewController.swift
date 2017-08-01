@@ -20,19 +20,8 @@ class SearchViewController: UIViewController {
   var hasSearched = false
   var isLoading = false
   var dataTask: URLSessionDataTask?
-  
-  let clientID = "ea45394e87614af5b7a2c50dc67ff77d"
-  let clientSecret = "53e0bdead8a34e74bd2d6c1cec425dab"
   var accessToken: String?
 
-  
-  // MARK: Constants
-  struct TableViewCellIdentifiers {
-    static let searchResultCell = "SearchResultCell"
-    static let nothingFoundCell = "NothingFoundCell"
-    static let loadingCell = "LoadingCell"
-  }
-  
   // MARK: IBActions
   @IBAction func segmentChanged(_ sender: UISegmentedControl) {
     performSearch()
@@ -48,14 +37,14 @@ class SearchViewController: UIViewController {
     tableView.contentInset = UIEdgeInsets(top: 108, left: 0, bottom: 0, right: 0)
     
     /* Use the nib SearchResultCell, NothingFoundCell or LoadingCell, whichever is appropriate for the situation */
-    var cellNib = UINib(nibName: TableViewCellIdentifiers.searchResultCell, bundle: nil)
-    tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.searchResultCell)
+    var cellNib = UINib(nibName: Constants.TableViewCellIdentifiers.SearchResultCell, bundle: nil)
+    tableView.register(cellNib, forCellReuseIdentifier: Constants.TableViewCellIdentifiers.SearchResultCell)
     
-    cellNib = UINib(nibName: TableViewCellIdentifiers.nothingFoundCell, bundle: nil)
-    tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.nothingFoundCell)
+    cellNib = UINib(nibName: Constants.TableViewCellIdentifiers.NothingFoundCell, bundle: nil)
+    tableView.register(cellNib, forCellReuseIdentifier: Constants.TableViewCellIdentifiers.NothingFoundCell)
     
-    cellNib = UINib(nibName: TableViewCellIdentifiers.loadingCell, bundle: nil)
-    tableView.register(cellNib, forCellReuseIdentifier: TableViewCellIdentifiers.loadingCell)
+    cellNib = UINib(nibName: Constants.TableViewCellIdentifiers.LoadingCell, bundle: nil)
+    tableView.register(cellNib, forCellReuseIdentifier: Constants.TableViewCellIdentifiers.LoadingCell)
   }
 
   override func didReceiveMemoryWarning() {
@@ -70,16 +59,16 @@ class SearchViewController: UIViewController {
     /* TASK: Request authorization in order to obtain an access token needed to access the Spotify WEB API */
     
     /* Configure the request */
-    let urlString = "https://accounts.spotify.com/api/token"
+    let urlString = Constants.Methods.AuthorizationURL
     let url = URL(string: urlString)
     
     let request = NSMutableURLRequest(url: url!)
     request.httpMethod = "POST"
     
-    let stringBase64 = Data("\(clientID):\(clientSecret)".utf8).base64EncodedString()
+    let stringBase64 = Data("\(Constants.ClientID):\(Constants.ClientSecret)".utf8).base64EncodedString()
     request.addValue("Basic \(stringBase64)", forHTTPHeaderField: "Authorization")
     
-    let bodyParameter = "grant_type=client_credentials"
+    let bodyParameter = Constants.BodyParameter
     request.httpBody = bodyParameter.data(using: .utf8)
     
     /* Make the request */
@@ -97,7 +86,7 @@ class SearchViewController: UIViewController {
       /* If yes, unwrap the data object for 'data' parameter, call the parse(json:) on it to get the top-level dictionary where the 'access_token' sits */
         if let jsonData = data, let jsonDictionary = self.parse(json: jsonData) {
           /* Get the access token from dictionary */
-          if let accessTokenString = jsonDictionary["access_token"] as? String {
+          if let accessTokenString = jsonDictionary[Constants.SpotifyResponseKeys.AceessToken] as? String {
             completionHandlerForToken(true, accessTokenString)
             return
           }
@@ -131,10 +120,10 @@ class SearchViewController: UIViewController {
     var entityName: String
     
     switch category {
-    case 0: entityName = "track"
-    case 1: entityName = "artist"
-    case 2: entityName = "album"
-    case 3: entityName = "playlist"
+    case 0: entityName = Constants.SpotifyParameterValues.Track
+    case 1: entityName = Constants.SpotifyParameterValues.Artist
+    case 2: entityName = Constants.SpotifyParameterValues.Album
+    case 3: entityName = Constants.SpotifyParameterValues.Playlist
     default: entityName = ""
     }
     
@@ -194,14 +183,14 @@ class SearchViewController: UIViewController {
   func parse(dictionary: [String: AnyObject]) -> [[String: AnyObject]]? {
     
     /* GUARD: Top-level dictionary */
-    guard let tracksDictionary = dictionary["tracks"] as? [String: AnyObject] else {
-      print("Could not find key 'tracks' in: \(dictionary)")
+    guard let tracksDictionary = dictionary[Constants.SpotifyResponseKeys.Tracks] as? [String: AnyObject] else {
+      print("Could not find key '\(Constants.SpotifyResponseKeys.Tracks)' in: '\(dictionary)'")
       return nil
     }
     
     /* GUARD: The 'items' array containing info for each track (in form of dictionaries) */
-    guard let itemsArray = tracksDictionary["items"] as? [[String: AnyObject]] else {
-      print("Could not find key 'items' in: \(tracksDictionary)")
+    guard let itemsArray = tracksDictionary[Constants.SpotifyResponseKeys.Items] as? [[String: AnyObject]] else {
+      print("Could not find key '\(Constants.SpotifyResponseKeys.Items)' in: '\(tracksDictionary)'")
       return nil
     }
     return itemsArray
@@ -215,28 +204,39 @@ class SearchViewController: UIViewController {
       
       let searchResult = SearchResult()
       /* Get the 'artists' array, where the name of artist is located */
-      if let artistsArray = resultDict["artists"] as? [[String: AnyObject]] {
+      if let artistsArray = resultDict[Constants.SpotifyResponseKeys.Artists] as? [[String: AnyObject]] {
         /* Get the dictionary inside the array (there should be only one in each 'artists' array) */
         let dict = artistsArray[0]
         /* Get the artist name */
-        if let artistName = dict["name"] as? String {
+        if let artistName = dict[Constants.SpotifyResponseKeys.ArtistName] as? String {
           searchResult.artistName = artistName
         }
       }
       
       /* Get the track name */
-      if let trackName = resultDict["name"] as? String {
+      if let trackName = resultDict[Constants.SpotifyResponseKeys.TrackName] as? String {
         searchResult.name = trackName
       }
       
       /* Get the popularity index of the track */
-      if let popularity = resultDict["popularity"] as? Double {
-        searchResult.popularity = popularity
+      if let popularity = resultDict[Constants.SpotifyResponseKeys.TrackPopularity] as? Double {
+        searchResult.popularity = Int(popularity)
       }
       
       /* Get the previewURL of the track */
-      if let previewURL = resultDict["preview_url"] as? String {
+      if let previewURL = resultDict[Constants.SpotifyResponseKeys.TrackPreviewURL] as? String {
         searchResult.previewURL = previewURL
+      }
+      
+      /* Get the 'album' dictionary, where the 'images' array is located */
+      if let albumDictionary = resultDict[Constants.SpotifyResponseKeys.Album] as? [String: AnyObject],
+        /* Get the 'images' array, where the image URLs are located */
+        let imagesArray = albumDictionary[Constants.SpotifyResponseKeys.Images] as? [[String: AnyObject]],
+        /* Get the first dictionary from the array (this is the dictionary that contains the URL for the image with the best resolution) */
+        let imageURLDictionary = imagesArray.last,
+        /* Get the image url */
+        let imageURL = imageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String {
+        searchResult.imageURL = imageURL
       }
       
       searchResults.append(searchResult)
@@ -318,21 +318,20 @@ extension SearchViewController: UITableViewDataSource {
     // Handling the three possible scenarios:
     /* 1. Returns one cell, the LoadingCell, showing the user that data is being retrieved from the Spotify server */
     if isLoading {
-      let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.loadingCell, for: indexPath)
+      let cell = tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.LoadingCell, for: indexPath)
       let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
       spinner.startAnimating()
       return cell
       
     /* 2. Also returns one cell, the NothingFoundCell, showing the user that no data matches her search */
     } else if searchResults.count == 0 {
-      return tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.nothingFoundCell, for: indexPath)
+      return tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.NothingFoundCell, for: indexPath)
     
       /* 3.Returns cells populated with searchResult objects, upon a successful search */
     } else {
-      let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCellIdentifiers.searchResultCell, for: indexPath) as! SearchResultCell
+      let cell = tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.SearchResultCell, for: indexPath) as! SearchResultCell
       let searchResult = searchResults[indexPath.row]
-      cell.trackNameLabel.text = searchResult.name
-      cell.artistNameLabel.text = searchResult.artistName
+      cell.configure(for: searchResult)
       return cell
     }
   }

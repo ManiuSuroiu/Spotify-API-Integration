@@ -14,6 +14,8 @@ class SearchResultCell: UITableViewCell {
   @IBOutlet weak var trackNameLabel: UILabel!
   @IBOutlet weak var artworkImageView: UIImageView!
   
+  var downloadTask: URLSessionDownloadTask?
+  
   override func awakeFromNib() {
     super.awakeFromNib()
     let selectedView = UIView(frame: CGRect.zero)
@@ -25,5 +27,27 @@ class SearchResultCell: UITableViewCell {
     super.setSelected(selected, animated: animated)
 
     // Configure the view for the selected state
+  }
+  
+  override func prepareForReuse() {
+    super.prepareForReuse()
+    
+    downloadTask?.cancel()
+    downloadTask = nil
+  }
+  
+  func configure(for searchResult: SearchResult) {
+    trackNameLabel.text = searchResult.name
+    
+    if searchResult.artistName.isEmpty {
+      artistNameLabel.text = "Unknown"
+    } else {
+      artistNameLabel.text = String(format: "%@ (Popularity: %d)", searchResult.artistName, searchResult.popularity)
+    }
+    
+    artworkImageView.image = UIImage(named: "Placeholder")
+    if let imageURL = URL(string: searchResult.imageURL) {
+      downloadTask = artworkImageView.loadImage(url: imageURL)
+    }
   }
 }

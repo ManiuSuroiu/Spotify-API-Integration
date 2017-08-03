@@ -108,13 +108,25 @@ class SearchViewController: UIViewController {
     dataTask?.resume()
   }
   
-  // MARK: Search through Spotify
+  // MARK: Convenience method to help construct the URL
+  func spotifyURLFromParameters(_ parameters: [String: AnyObject]) -> URL {
+    
+    var components = URLComponents()
+    components.scheme = Constants.Spotify.APIScheme
+    components.host = Constants.Spotify.APIHost
+    components.path = Constants.Spotify.ApiPath + Constants.Methods.Search
+    components.queryItems = [URLQueryItem]()
+    
+    for (key, value) in parameters {
+      let queryItem = URLQueryItem(name: key, value: "\(value)")
+      components.queryItems!.append(queryItem)
+    }
+    return components.url!
+  }
   
-  func performSpotifySearch(searchText: String, category: Int) {
+  // MARK: Construct the URL necessary to perform a search. Call it from performSpotifySearch()
+  func spotifyURL(searchText: String, category: Int) -> URL {
     
-    /* TASK: Implement the 'search' Spotify API endpoint to return information about artists, tracks, albums or playlists */
-    
-    /* Configure the request */
     let escapedSearchText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
     
     var entityName: String
@@ -127,10 +139,24 @@ class SearchViewController: UIViewController {
     default: entityName = ""
     }
     
-    let urlString = String(format: "https://api.spotify.com/v1/search?q=%@&type=%@&limit=50", escapedSearchText, entityName)
-    let url = URL(string: urlString)
+    let methodParameters = [
+      Constants.SpotifyParameterKeys.Query: escapedSearchText,
+      Constants.SpotifyParameterKeys.ItemType: entityName,
+      Constants.SpotifyParameterKeys.Limit: Constants.SpotifyParameterValues.MaximumLimit
+    ]
     
-    let request = NSMutableURLRequest(url: url!)
+    let url = spotifyURLFromParameters(methodParameters as [String: AnyObject])
+    return url
+  }
+
+  // MARK: Search through Spotify
+  
+  func performSpotifySearch() {
+    
+    /* TASK: Implement the 'search' Spotify API endpoint to return information about artists, tracks, albums or playlists */
+    
+    /* Configure the request */
+    let request = NSMutableURLRequest(url: spotifyURL(searchText: searchBar.text!, category: segmentedControl.selectedSegmentIndex))
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
@@ -275,7 +301,7 @@ class SearchViewController: UIViewController {
       requestAuthorizationFromSpotify() { (success, accessToken) in
         if success {
           self.accessToken = accessToken
-          self.performSpotifySearch(searchText: self.searchBar.text!, category: self.segmentedControl.selectedSegmentIndex)
+          self.performSpotifySearch()
           return
         }
       }

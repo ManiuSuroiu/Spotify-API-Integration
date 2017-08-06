@@ -53,14 +53,12 @@ class SearchViewController: UIViewController {
   }
   
   // MARK: Spotify Request Authorization
-  
   func requestAuthorizationFromSpotify(_ completionHandlerForToken: @escaping (_ success: Bool, _ accessToken: String?) -> Void) {
     
     /* TASK: Request authorization in order to obtain an access token needed to access the Spotify WEB API */
     
     /* Configure the request */
-    let urlString = Constants.Methods.AuthorizationURL
-    let url = URL(string: urlString)
+    let url = URL(string: Constants.Methods.AuthorizationURL)
     
     let request = NSMutableURLRequest(url: url!)
     request.httpMethod = "POST"
@@ -72,38 +70,42 @@ class SearchViewController: UIViewController {
     request.httpBody = bodyParameter.data(using: .utf8)
     
     /* Make the request */
-    
     dataTask = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
       
       /* Was there an error? */
-      if let error = error as NSError?, error.code == -999 {
+      guard (error == nil), (error as NSError?)?.code != 999 else {
         print("There was an error with your request: \(String(describing: error))")
+        completionHandlerForToken(false, nil)
         return
-        
+      }
+      
       /* Did the status code returned a successful 200 response? */
-      } else if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
+      guard let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 else {
+        print("Your request returned  a status code other than 200!")
+        completionHandlerForToken(false, nil)
+        return
+      }
       
       /* If yes, unwrap the data object for 'data' parameter, call the parse(json:) on it to get the top-level dictionary where the 'access_token' sits */
-        if let jsonData = data, let jsonDictionary = self.parse(json: jsonData) {
-          /* Get the access token from dictionary */
-          if let accessTokenString = jsonDictionary[Constants.SpotifyResponseKeys.AceessToken] as? String {
-            completionHandlerForToken(true, accessTokenString)
-            return
-          }
-        }
-      
-      /* If the status code was other than 200 print the response from the server to get more details */
-      } else {
-        print("Failure: \(String(describing: response))")
+      guard let jsonData = data else {
+        print("No data was returned by the request!")
+        completionHandlerForToken(false, nil)
+        return
       }
       
-      /* Update the UI on the main thread and display an error to the user in case any of the above goes wrong. This code should never get executed upon a successful request */
-      DispatchQueue.main.async {
-        self.hasSearched = false
-        self.isLoading = false
-        self.tableView.reloadData()
-        self.showNetworkError()
+      guard let jsonDictionary = self.parse(json: jsonData) else {
+        print("Could not parse the data as JSON: \(String(describing: data))")
+        completionHandlerForToken(false, nil)
+        return
       }
+      
+      /* Get the access token from dictionary */
+      guard let accessTokenString = jsonDictionary[Constants.SpotifyResponseKeys.AccessToken] as? String else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.AccessToken)' in '\(jsonDictionary)'")
+        completionHandlerForToken(false, nil)
+        return
+      }
+      completionHandlerForToken(true, accessTokenString)
     }
     dataTask?.resume()
   }
@@ -151,7 +153,7 @@ class SearchViewController: UIViewController {
 
   // MARK: Search through Spotify
   
-  func performSpotifySearch() {
+  func performSpotifySearch(_ completionHandlerForSearch: @escaping (_ success: Bool) -> Void) {
     
     /* TASK: Implement the 'search' Spotify API endpoint to return information about artists, tracks, albums or playlists */
     
@@ -160,14 +162,15 @@ class SearchViewController: UIViewController {
     request.addValue("application/json", forHTTPHeaderField: "Accept")
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     request.addValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+    print("URL: \(spotifyURL(searchText: searchBar.text!, category: segmentedControl.selectedSegmentIndex))")
     
     /* Make the request */
-    
     dataTask = URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
       
       /* GUARD: Was there an error? */
       guard (error == nil) else {
         print("There was an error with your request: \(String(describing: error))")
+        completionHandlerForSearch(false)
         return
       }
       
@@ -185,12 +188,11 @@ class SearchViewController: UIViewController {
         self.searchResults = self.parse(items: itemsArray)
         self.searchResults.sort(by: <)
         
+        print("Results: \(self.searchResults.count)")
+        completionHandlerForSearch(true)
+        
         /* Update the UI on the main thread: hide the activity indicator cell and reload all the data from searchResults into the table view */
-        DispatchQueue.main.async {
-          self.isLoading = false
-          self.tableView.reloadData()
-        }
-      }
+      } else { completionHandlerForSearch(false) }
     }
     dataTask?.resume()
   }
@@ -230,14 +232,14 @@ class SearchViewController: UIViewController {
       
       let searchResult = SearchResult()
       /* Get the 'artists' array, where the name of artist is located */
-      if let artistsArray = resultDict[Constants.SpotifyResponseKeys.Artists] as? [[String: AnyObject]] {
+      if let artistsArray = resultDict[Constants.SpotifyResponseKeys.Artists] as? [[String: AnyObject]],
         /* Get the dictionary inside the array (there should be only one in each 'artists' array) */
-        let dict = artistsArray[0]
+        let dict = artistsArray.last,
         /* Get the artist name */
-        if let artistName = dict[Constants.SpotifyResponseKeys.ArtistName] as? String {
+        let artistName = dict[Constants.SpotifyResponseKeys.ArtistName] as? String {
           searchResult.artistName = artistName
-        }
       }
+      
       
       /* Get the track name */
       if let trackName = resultDict[Constants.SpotifyResponseKeys.TrackName] as? String {
@@ -299,10 +301,27 @@ class SearchViewController: UIViewController {
       
       /* Request an access token from Spotify, if obtained assign it to the 'accessToken' instance variable and use it to perform a search through Spotify */
       requestAuthorizationFromSpotify() { (success, accessToken) in
+        
         if success {
           self.accessToken = accessToken
-          self.performSpotifySearch()
-          return
+          
+          self.performSpotifySearch() { success in
+          
+            if success {
+              DispatchQueue.main.async {
+                self.isLoading = false
+                self.tableView.reloadData()
+              }
+            }
+          }
+          
+        } else {
+          DispatchQueue.main.async {
+            self.hasSearched = false
+            self.isLoading = false
+            self.tableView.reloadData()
+            self.showNetworkError()
+          }
         }
       }
     }

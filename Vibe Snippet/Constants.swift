@@ -52,7 +52,7 @@ struct Constants {
   
   // MARK: Spotify Response Keys
   struct SpotifyResponseKeys {
-    static let AceessToken = "access_token"
+    static let AccessToken = "access_token"
     static let Tracks = "tracks"
     static let Items = "items"
     static let Artists = "artists"

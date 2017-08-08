@@ -37,12 +37,12 @@ class SearchResultCell: UITableViewCell {
   }
   
   func configure(for searchResult: SearchResult) {
-    trackNameLabel.text = searchResult.name
+    trackNameLabel.text = searchResult.trackName
     
     if searchResult.artistName.isEmpty {
       artistNameLabel.text = "Unknown"
     } else {
-      artistNameLabel.text = String(format: "%@ (Popularity: %d)", searchResult.artistName, searchResult.popularity)
+      artistNameLabel.text = String(format: "%@ (Popularity: %d)", searchResult.artistName, searchResult.trackPopularity)
     }
     
     artworkImageView.image = UIImage(named: "Placeholder")

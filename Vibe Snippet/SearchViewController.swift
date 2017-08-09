@@ -61,17 +61,20 @@ class SearchViewController: UIViewController {
   
   // MARK: Perform a search - needs to be called from two different places, searchBarSearchButtonClicked() and the segmentChanged() IBAction so when the user switches to a different type (ie 'album' or 'playlist') the app performs a new search with the specified type in the URL
   func performSearch() {
-    search.performSearch(text: searchBar.text!, category: segmentedControl.selectedSegmentIndex) { searchComplete in
-      print("On main thread? " + (Thread.current.isMainThread ? "Yes" : "No"))
-      
-      /* Use the completion handler's boolean value to determine whether the search was successful or not. If its value is 'false' show the network error to the user */
-      if !searchComplete {
-        self.showNetworkError()
+    
+    /* Convert the selected segment index into a Category value */
+    if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+      search.performSearch(text: searchBar.text!, category: category) { searchComplete in
+        
+        /* Use the completion handler's boolean value to determine whether the search was successful or not. If its value is 'false' show the network error to the user */
+        if !searchComplete {
+          self.showNetworkError()
+        }
+        self.tableView.reloadData()
       }
-      self.tableView.reloadData()
+      tableView.reloadData()
+      searchBar.resignFirstResponder()
     }
-    tableView.reloadData()
-    searchBar.resignFirstResponder()
   }
 }
 

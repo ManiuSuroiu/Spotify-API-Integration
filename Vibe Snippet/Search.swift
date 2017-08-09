@@ -18,13 +18,26 @@ class Search {
   
   private var dataTask: URLSessionDataTask?
   
-  let parseTracks = ParseTracks()
-  let parseArtists = ParseArtists()
-  let parseAlbums = ParseAlbums()
-  let parsePlaylists = ParsePlaylists()
+  let parseItems = ParseItems()
+  
+  enum Category: Int {
+    case tracks = 0
+    case artists = 1
+    case albums = 2
+    case playlists = 3
+    
+    var entityName: String {
+      switch self {
+      case .tracks: return Constants.SpotifyParameterValues.Track
+      case .artists: return Constants.SpotifyParameterValues.Artist
+      case .albums: return Constants.SpotifyParameterValues.Album
+      case .playlists: return Constants.SpotifyParameterValues.Playlist
+      }
+    }
+  }
   
   // MARK: Spotify Request Authorization
-  func requestAuthorizationFromSpotify(_ completionHandlerForToken: @escaping (_ success: Bool, _ accessToken: String?) -> Void) {
+  private func requestAuthorizationFromSpotify(_ completionHandlerForToken: @escaping (_ success: Bool, _ accessToken: String?) -> Void) {
     
     /* TASK: Request authorization in order to obtain an access token needed to access the Spotify WEB API */
     
@@ -83,7 +96,7 @@ class Search {
   }
   
   // MARK: Convenience method to help construct the URL
-  func spotifyURLFromParameters(_ parameters: [String: AnyObject]) -> URL {
+  private func spotifyURLFromParameters(_ parameters: [String: AnyObject]) -> URL {
     
     var components = URLComponents()
     components.scheme = Constants.Spotify.APIScheme
@@ -98,18 +111,13 @@ class Search {
     return components.url!
   }
   
-  // MARK: Construct the URL necessary to perform a search. Call it from performSpotifySearch()
-  func spotifyURL(searchText: String, category: Int) -> URL {
+  // MARK: Search through Spotify
+  private func performSpotifySearch(searchText: String, category: Category, completionHandlerForSearch: @escaping (_ success: Bool) -> Void) {
     
-    var entityName: String
+    /* TASK: Implement the 'search' Spotify API endpoint to return information about artists, tracks, albums or playlists */
     
-    switch category {
-    case 0: entityName = Constants.SpotifyParameterValues.Track
-    case 1: entityName = Constants.SpotifyParameterValues.Artist
-    case 2: entityName = Constants.SpotifyParameterValues.Album
-    case 3: entityName = Constants.SpotifyParameterValues.Playlist
-    default: entityName = ""
-    }
+    /* Construct the URL necessary to perform a search */
+    let entityName = category.entityName
     
     let methodParameters = [
       Constants.SpotifyParameterKeys.Query: searchText,
@@ -118,13 +126,6 @@ class Search {
     ]
     
     let url = spotifyURLFromParameters(methodParameters as [String: AnyObject])
-    return url
-  }
-  
-  // MARK: Search through Spotify
-  func performSpotifySearch(with url: URL, completionHandlerForSearch: @escaping (_ success: Bool) -> Void) {
-    
-    /* TASK: Implement the 'search' Spotify API endpoint to return information about artists, tracks, albums or playlists */
     
     /* Configure the request */
     let request = NSMutableURLRequest(url: url)
@@ -150,13 +151,28 @@ class Search {
         let jsonDictionary = self.parse(json: jsonData),
         
         /* Call parse(dictionary:) on the top level dictionary to get the 'items' array where all the necessary data to populate the UI sits */
-        let itemsArray = self.parsePlaylists.parse(dictionary: jsonDictionary) {
+        let itemsArray = self.parse(dictionary: jsonDictionary, category: category) {
         
-        /* Call parse(items:) on the items array to get the data needed and assign it to searchResults properties. Sort the search alphabetically (by the track name). */
-        self.searchResults = self.parsePlaylists.parse(items: itemsArray)
-        self.searchResults.sort(by: <)
+        /* Determine which array to parse (tracks, artists, albums, playlists) */
+        switch category {
         
-        print("Results: \(self.searchResults.count)")
+        /* Parse the items array corresponding to the specified category and assign the objects obtained to searchResults properties. Sort the search alphabetically (by the track name). Set the completion handler to true */
+        case .tracks:
+          self.searchResults = self.parseItems.parse(tracks: itemsArray)
+          self.searchResults.sort(by: tracksOrderedAscending(lhs:rhs:))
+        
+        case .artists:
+          self.searchResults = self.parseItems.parse(artists: itemsArray)
+          self.searchResults.sort(by: >)
+          
+        case .albums:
+          self.searchResults = self.parseItems.parse(albums: itemsArray)
+          self.searchResults.sort(by: albumsOrderedAscending(lhs:rhs:))
+          
+        case .playlists:
+          self.searchResults = self.parseItems.parse(playlists: itemsArray)
+          self.searchResults.sort(by: playlistsOrderedAscending(lhs:rhs:))
+        }
         completionHandlerForSearch(true)
         
         /* If any of the above fails set the completion handler boolean value to false */
@@ -166,7 +182,7 @@ class Search {
   }
   
   // MARK: Parse the JSON
-  func parse(json data: Data) -> [String: AnyObject]? {
+  private func parse(json data: Data) -> [String: AnyObject]? {
     do {
       return try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
     } catch {
@@ -175,8 +191,72 @@ class Search {
     }
   }
   
+  // MARK: Parse the top-level dictionary returned by parse(json) and return the array of dictionaries where all the data sits
+  func parse(dictionary: [String: AnyObject], category: Category) -> [[String: AnyObject]]? {
+    
+    /* Determine which top-level dictionary to parse */
+    switch category {
+      
+    case .tracks:
+      /* GUARD: Top-level dictionary */
+      guard let tracksDictionary = dictionary[Constants.SpotifyResponseKeys.Tracks] as? [String: AnyObject] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Tracks)' in: '\(dictionary)'")
+        return nil
+      }
+      
+      /* GUARD: The 'items' array containing info for each track (in form of dictionaries) */
+      guard let itemsArray = tracksDictionary[Constants.SpotifyResponseKeys.Items] as? [[String: AnyObject]] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Items)' in: '\(tracksDictionary)'")
+        return nil
+      }
+      return itemsArray
+      
+    case .artists:
+      /* GUARD: Get the top-level dictionary */
+      guard let artistsDictionary = dictionary[Constants.SpotifyResponseKeys.Artists] as? [String: AnyObject] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Artists)' in: '\(dictionary)'")
+        return nil
+      }
+      
+      /* GUARD: Get the 'items' array containing info for each artist (in form of dictionaries) */
+      guard let itemsArray = artistsDictionary[Constants.SpotifyResponseKeys.Items] as? [[String: AnyObject]] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Items)' in: '\(artistsDictionary)'")
+        return nil
+      }
+      return itemsArray
+      
+    case .albums:
+      /* GUARD: Get the top-level dictionary */
+      guard let albumsDictionary = dictionary[Constants.SpotifyResponseKeys.Albums] as? [String: AnyObject] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Albums)' in: '\(dictionary)'")
+        return nil
+      }
+      
+      /* GUARD: Get the 'items' array containing info for each artist (in form of dictionaries) */
+      guard let itemsArray = albumsDictionary[Constants.SpotifyResponseKeys.Items] as? [[String: AnyObject]] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Items)' in: '\(albumsDictionary)'")
+        return nil
+      }
+      return itemsArray
+      
+    case .playlists:
+      /* GUARD: Get the top-level dictionary */
+      guard let playlistsDictionary = dictionary[Constants.SpotifyResponseKeys.Playlists] as? [String: AnyObject] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Playlists)' in: '\(dictionary)'")
+        return nil
+      }
+      
+      /* GUARD: Get the 'items' array containing info for each artist (in form of dictionaries) */
+      guard let itemsArray = playlistsDictionary[Constants.SpotifyResponseKeys.Items] as? [[String: AnyObject]] else {
+        print("Could not find key '\(Constants.SpotifyResponseKeys.Items)' in: '\(playlistsDictionary)'")
+        return nil
+      }
+      return itemsArray
+    }
+  }
+  
   // MARK: Perform a search - chain the completion handlers of requestAuthorizationFromSpotify() and performSpotifySearch(with:) so they run one after the other
-  func performSearch(text: String, category: Int, completion: @escaping (_ searchComplete: Bool) -> Void) {
+  func performSearch(text: String, category: Category, completion: @escaping (_ searchComplete: Bool) -> Void) {
     
     /* Checks for the search bar not to be empty */
     if !text.isEmpty {
@@ -193,8 +273,8 @@ class Search {
         if success {
           
           self.accessToken = accessToken
-          print("Token: \(String(describing: accessToken))")
-          self.performSpotifySearch(with: self.spotifyURL(searchText: text, category: category)) { success in
+          
+          self.performSpotifySearch(searchText: text, category: Search.Category(rawValue: category.rawValue)!) { success in
             
             if success {
               /* Update the UI on the main thread: hide the activity indicator cell and set the completion handler to true */

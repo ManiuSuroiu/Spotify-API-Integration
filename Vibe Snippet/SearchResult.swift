@@ -27,12 +27,25 @@ class SearchResult {
   var genres: [String?] = []
 }
 
-// Sort the search results returned by the endpoint alphabetically - by the track name.
-func < (lhs: SearchResult, rhs: SearchResult) -> Bool {
+// Sort the search results alphabetically - by the track name
+func tracksOrderedAscending(lhs: SearchResult, rhs: SearchResult) -> Bool {
   return lhs.trackName.localizedStandardCompare(rhs.trackName) == .orderedAscending
 }
 
+// Sort the search results in a decreasing order - by the number of followers (the most first)
+func > (lhs: SearchResult, rhs: SearchResult) -> Bool {
+  return lhs.followers > rhs.followers
+}
 
+// Sort the search results alphabetically - by the album name
+func albumsOrderedAscending(lhs: SearchResult, rhs: SearchResult) -> Bool {
+  return lhs.albumName.localizedStandardCompare(rhs.albumName) == . orderedAscending
+}
+
+// Sort the search results alphabetically - by the playlist name
+func playlistsOrderedAscending(lhs: SearchResult, rhs: SearchResult) -> Bool {
+  return lhs.playlistName.localizedStandardCompare(rhs.playlistName) == .orderedAscending
+}
 
 
 

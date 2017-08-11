@@ -10,11 +10,25 @@ import UIKit
 
 class SearchResultCell: UITableViewCell {
   
+  // MARK: Outlets for 'tracks' search
   @IBOutlet weak var artistNameLabel: UILabel!
   @IBOutlet weak var trackNameLabel: UILabel!
+  
+  // MARK: Outlets for 'artists' search
+  @IBOutlet weak var artistName: UILabel!
+  @IBOutlet weak var numberOfFollowersLabel: UILabel!
+  
+  // MARK: Outlet for 'albums' search
+  @IBOutlet weak var albumNameLabel: UILabel!
+  
+  // MARK: Outlets for 'playlists' search
+  @IBOutlet weak var playlistNameLabel: UILabel!
+  @IBOutlet weak var numberOfTracksLabel: UILabel!
+  
+  // MARK: UIImageView outlet, available for all four types of search
   @IBOutlet weak var artworkImageView: UIImageView!
   
-  var downloadTask: URLSessionDownloadTask?
+  private var downloadTask: URLSessionDownloadTask?
   
   override func awakeFromNib() {
     super.awakeFromNib()
@@ -36,15 +50,29 @@ class SearchResultCell: UITableViewCell {
     downloadTask = nil
   }
   
-  func configure(for searchResult: SearchResult) {
-    trackNameLabel.text = searchResult.trackName
+  // MARK: Configure the cell's labels according to the type of search. Call it from UITableViewDataSource method tableView(tableView:cellForRowAt:) in SearchViewController
+  func configure(for searchResult: SearchResult, category: Search.Category) {
     
-    if searchResult.artistName.isEmpty {
-      artistNameLabel.text = "Unknown"
-    } else {
+    /* Match the appropriate case to the selected integer value of the segmentedControl */
+    switch category {
+    case .tracks:
+      trackNameLabel.text = searchResult.trackName
       artistNameLabel.text = String(format: "%@ (Popularity: %d)", searchResult.artistName, searchResult.trackPopularity)
+        
+    case .artists:
+      artistName.text = searchResult.artistName
+      numberOfFollowersLabel.text = String(format: "Followers: %d", searchResult.followers)
+      
+    case .albums:
+      albumNameLabel.text = searchResult.albumName
+      artistNameLabel.text = searchResult.artistName
+        
+    case .playlists:
+      playlistNameLabel.text = searchResult.playlistName
+      numberOfTracksLabel.text = String(format: "Tracks: %d", searchResult.numberOfTracks)
     }
     
+    /* Set the imageView to the image downloaded from the server */
     artworkImageView.image = UIImage(named: "Placeholder")
     if let imageURL = URL(string: searchResult.imageURL) {
       downloadTask = artworkImageView.loadImage(url: imageURL)

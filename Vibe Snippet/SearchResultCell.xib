@@ -50,8 +50,13 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="albumNameLabel" destination="hxX-yv-XIM" id="f3c-se-rP0"/>
+                <outlet property="artistName" destination="hxX-yv-XIM" id="kgu-zs-WYa"/>
                 <outlet property="artistNameLabel" destination="I2A-El-anU" id="F98-gX-mC5"/>
                 <outlet property="artworkImageView" destination="JFb-nc-r8T" id="cCI-wG-yBb"/>
+                <outlet property="numberOfFollowersLabel" destination="I2A-El-anU" id="Wj4-BY-Aq5"/>
+                <outlet property="numberOfTracksLabel" destination="I2A-El-anU" id="4RP-Ff-Vbe"/>
+                <outlet property="playlistNameLabel" destination="hxX-yv-XIM" id="ZrI-g5-5KW"/>
                 <outlet property="trackNameLabel" destination="hxX-yv-XIM" id="l3A-An-Xb1"/>
             </connections>
             <point key="canvasLocation" x="-19" y="-28"/>

@@ -126,7 +126,10 @@ extension SearchViewController: UITableViewDataSource {
     } else {
       let cell = tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.SearchResultCell, for: indexPath) as! SearchResultCell
       let searchResult = search.searchResults[indexPath.row]
-      cell.configure(for: searchResult)
+      
+      if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+        cell.configure(for: searchResult, category: category)
+      }
       return cell
     }
   }

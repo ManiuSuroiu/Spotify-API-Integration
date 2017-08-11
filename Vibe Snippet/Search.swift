@@ -156,7 +156,7 @@ class Search {
         /* Determine which array to parse (tracks, artists, albums, playlists) */
         switch category {
         
-        /* Parse the items array corresponding to the specified category and assign the objects obtained to searchResults properties. Sort the search alphabetically (by the track name). Set the completion handler to true */
+        /* Parse the items array corresponding to the specified category and assign the objects obtained to searchResults properties. Sort the search alphabetically */
         case .tracks:
           self.searchResults = self.parseItems.parse(tracks: itemsArray)
           self.searchResults.sort(by: tracksOrderedAscending(lhs:rhs:))
@@ -173,6 +173,7 @@ class Search {
           self.searchResults = self.parseItems.parse(playlists: itemsArray)
           self.searchResults.sort(by: playlistsOrderedAscending(lhs:rhs:))
         }
+        /* Set the completion handler to true */
         completionHandlerForSearch(true)
         
         /* If any of the above fails set the completion handler boolean value to false */

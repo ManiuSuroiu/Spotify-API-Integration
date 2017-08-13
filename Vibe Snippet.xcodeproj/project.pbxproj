@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B0889ED1F3DF1C900006BAD /* TrackDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0889EC1F3DF1C900006BAD /* TrackDetailViewController.swift */; };
+		8B0889EF1F3EEEEB00006BAD /* DimmingPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0889EE1F3EEEEB00006BAD /* DimmingPresentationController.swift */; };
 		8B1419291F1F32B700DD3CE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1419281F1F32B700DD3CE1 /* AppDelegate.swift */; };
 		8B14192B1F1F32B700DD3CE1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14192A1F1F32B700DD3CE1 /* SearchViewController.swift */; };
 		8B14192E1F1F32B700DD3CE1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B14192C1F1F32B700DD3CE1 /* Main.storyboard */; };
@@ -15,6 +17,9 @@
 		8B44B6E81F2FC85700644696 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B44B6E71F2FC85700644696 /* Constants.swift */; };
 		8B472A1F1F3AE0790046A3BA /* ParseItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B472A1E1F3AE0790046A3BA /* ParseItems.swift */; };
 		8B4B9E5A1F2DFCDF00F1BADB /* LoadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B4B9E591F2DFCDF00F1BADB /* LoadingCell.xib */; };
+		8B77C4121F40A8BF00152DA8 /* ArtistDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B77C4111F40A8BF00152DA8 /* ArtistDetailViewController.swift */; };
+		8B77C4141F40AA3300152DA8 /* AlbumDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B77C4131F40AA3300152DA8 /* AlbumDetailViewController.swift */; };
+		8B77C4161F40AB4500152DA8 /* PlaylistDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B77C4151F40AB4500152DA8 /* PlaylistDetailViewController.swift */; };
 		8B97C14C1F3117D40083896C /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B97C14B1F3117D40083896C /* UIImageView+DownloadImage.swift */; };
 		8BEED2641F3789EE00622323 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEED2631F3789EE00622323 /* Search.swift */; };
 		8BEFD2861F23D11800685C52 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEFD2851F23D11800685C52 /* SearchResult.swift */; };
@@ -24,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8B0889EC1F3DF1C900006BAD /* TrackDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackDetailViewController.swift; sourceTree = "<group>"; };
+		8B0889EE1F3EEEEB00006BAD /* DimmingPresentationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DimmingPresentationController.swift; sourceTree = "<group>"; };
 		8B1419251F1F32B700DD3CE1 /* Vibe Snippet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vibe Snippet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B1419281F1F32B700DD3CE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B14192A1F1F32B700DD3CE1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -34,6 +41,9 @@
 		8B44B6E71F2FC85700644696 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8B472A1E1F3AE0790046A3BA /* ParseItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseItems.swift; sourceTree = "<group>"; };
 		8B4B9E591F2DFCDF00F1BADB /* LoadingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoadingCell.xib; sourceTree = "<group>"; };
+		8B77C4111F40A8BF00152DA8 /* ArtistDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ArtistDetailViewController.swift; path = ../ArtistDetailViewController.swift; sourceTree = "<group>"; };
+		8B77C4131F40AA3300152DA8 /* AlbumDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumDetailViewController.swift; sourceTree = "<group>"; };
+		8B77C4151F40AB4500152DA8 /* PlaylistDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistDetailViewController.swift; sourceTree = "<group>"; };
 		8B97C14B1F3117D40083896C /* UIImageView+DownloadImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+DownloadImage.swift"; sourceTree = "<group>"; };
 		8BEED2631F3789EE00622323 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 		8BEFD2851F23D11800685C52 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
@@ -87,6 +97,11 @@
 				8B97C14B1F3117D40083896C /* UIImageView+DownloadImage.swift */,
 				8BEED2631F3789EE00622323 /* Search.swift */,
 				8B472A1E1F3AE0790046A3BA /* ParseItems.swift */,
+				8B0889EC1F3DF1C900006BAD /* TrackDetailViewController.swift */,
+				8B77C4111F40A8BF00152DA8 /* ArtistDetailViewController.swift */,
+				8B77C4131F40AA3300152DA8 /* AlbumDetailViewController.swift */,
+				8B77C4151F40AB4500152DA8 /* PlaylistDetailViewController.swift */,
+				8B0889EE1F3EEEEB00006BAD /* DimmingPresentationController.swift */,
 			);
 			path = "Vibe Snippet";
 			sourceTree = "<group>";
@@ -167,10 +182,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B0889ED1F3DF1C900006BAD /* TrackDetailViewController.swift in Sources */,
+				8B0889EF1F3EEEEB00006BAD /* DimmingPresentationController.swift in Sources */,
 				8B44B6E81F2FC85700644696 /* Constants.swift in Sources */,
+				8B77C4121F40A8BF00152DA8 /* ArtistDetailViewController.swift in Sources */,
 				8B472A1F1F3AE0790046A3BA /* ParseItems.swift in Sources */,
+				8B77C4141F40AA3300152DA8 /* AlbumDetailViewController.swift in Sources */,
 				8B14192B1F1F32B700DD3CE1 /* SearchViewController.swift in Sources */,
 				8B97C14C1F3117D40083896C /* UIImageView+DownloadImage.swift in Sources */,
+				8B77C4161F40AB4500152DA8 /* PlaylistDetailViewController.swift in Sources */,
 				8BEFD2861F23D11800685C52 /* SearchResult.swift in Sources */,
 				8BEFD28A1F24954C00685C52 /* SearchResultCell.swift in Sources */,
 				8B1419291F1F32B700DD3CE1 /* AppDelegate.swift in Sources */,

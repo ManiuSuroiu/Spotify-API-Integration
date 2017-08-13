@@ -79,6 +79,14 @@ struct Constants {
     static let NothingFoundCell = "NothingFoundCell"
     static let LoadingCell = "LoadingCell"
   }
+  
+  // MARK: Segue Identifiers
+  struct SegueIdentifiers {
+    static let TrackSegue = "ShowDetailsForTrack"
+    static let ArtistSegue = "ShowDetailsForArtist"
+    static let AlbumSegue = "ShowDetailsForAlbum"
+    static let PlaylistSegue = "ShowDetailsForPlaylist"
+  }
 }
 
 

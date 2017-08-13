@@ -76,7 +76,30 @@ class SearchViewController: UIViewController {
       searchBar.resignFirstResponder()
     }
   }
+  
+  // MARK: prepare(for:sender:) Configure the view controller corresponding to its segue identifier when the segue is being triggered from tableView(didSelectRowAt)
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    
+    if let identifier = segue.identifier {
+      
+      switch identifier {
+      
+      case Constants.SegueIdentifiers.TrackSegue:
+        let trackDetailViewController = segue.destination as! TrackDetailViewController
+        let indexPath = sender as! IndexPath
+        let searchResult = search.searchResults[indexPath.row]
+        trackDetailViewController.searchResult = searchResult
+      case Constants.SegueIdentifiers.ArtistSegue:
+        let artistDetailViewController = segue.destination as! ArtistDetailViewController
+        let indexPath = sender as! IndexPath
+        let searchResult = search.searchResults[indexPath.row]
+      default:
+        break
+      }
+    }
+  }
 }
+
 
 // MARK: UISearchBarDelegate
 
@@ -139,8 +162,22 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
   
-  func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
+    
+    if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+      
+      switch category {
+      case .tracks:
+        performSegue(withIdentifier: Constants.SegueIdentifiers.TrackSegue, sender: indexPath)
+      case .artists:
+        performSegue(withIdentifier: Constants.SegueIdentifiers.ArtistSegue, sender: indexPath)
+      case .albums:
+        performSegue(withIdentifier: Constants.SegueIdentifiers.AlbumSegue, sender: indexPath)
+      case .playlists:
+        performSegue(withIdentifier: Constants.SegueIdentifiers.PlaylistSegue, sender: indexPath)
+      }
+    }
   }
   
   func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {

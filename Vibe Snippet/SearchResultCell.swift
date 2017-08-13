@@ -33,7 +33,7 @@ class SearchResultCell: UITableViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
     let selectedView = UIView(frame: CGRect.zero)
-    selectedView.backgroundColor = UIColor(red: 30/255, green: 255/255, blue: 40/255, alpha: 0.5)
+    selectedView.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.5)
     selectedBackgroundView = selectedView
   }
 
@@ -50,7 +50,7 @@ class SearchResultCell: UITableViewCell {
     downloadTask = nil
   }
   
-  // MARK: Configure the cell's labels according to the type of search. Call it from UITableViewDataSource method tableView(tableView:cellForRowAt:) in SearchViewController
+  // MARK: Configure the cell's labels according to the type of search. Call it from UITableViewDataSource method tableView(cellForRowAt:) in SearchViewController
   func configure(for searchResult: SearchResult, category: Search.Category) {
     
     /* Match the appropriate case to the selected integer value of the segmentedControl */
@@ -74,7 +74,7 @@ class SearchResultCell: UITableViewCell {
     
     /* Set the imageView to the image downloaded from the server */
     artworkImageView.image = UIImage(named: "Placeholder")
-    if let imageURL = URL(string: searchResult.imageURL) {
+    if let imageURL = URL(string: searchResult.smallImageURL) {
       downloadTask = artworkImageView.loadImage(url: imageURL)
     }
   }

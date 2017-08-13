@@ -14,7 +14,8 @@ class SearchResult {
   var albumName = ""
   var artistName = ""
   var playlistName = ""
-  var imageURL = ""
+  var smallImageURL = ""
+  var largeImageURL = ""
   var trackPopularity = 0
   var previewURL = ""
   var spotifyURLForArtist = ""

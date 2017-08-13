@@ -47,11 +47,17 @@ class ParseItems {
       if let albumDictionary = resultDict[Constants.SpotifyResponseKeys.Album] as? [String: AnyObject],
         /* Get the 'images' array, where the image URLs are located */
         let imagesArray = albumDictionary[Constants.SpotifyResponseKeys.Images] as? [[String: AnyObject]],
-        /* Get the last dictionary from the array (this is the dictionary that contains the URL for the image with the smallest size) */
-        let imageURLDictionary = imagesArray.last,
-        /* Get the image url */
-        let imageURL = imageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String {
-        searchResult.imageURL = imageURL
+        
+        /* Get the last dictionary from the array (this is the dictionary that contains the URL for the image with the smallest size - to display in the table view) */
+        let smallImageURLDictionary = imagesArray.last,
+        /* Get the small image url */
+        let smallImageURL = smallImageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String,
+        /* Get the first dictionary from the array (this is the dictionary that contains the URL for the image with the largest size - to display in the pop-up view) */
+        let largeImageURLDictionary = imagesArray.first,
+        /* Get the large image url */
+        let largeImageURL = largeImageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String {
+        searchResult.smallImageURL = smallImageURL
+        searchResult.largeImageURL = largeImageURL
       }
       searchResults.append(searchResult)
     }
@@ -95,7 +101,7 @@ class ParseItems {
         let imageURLDictionary = imagesArray.last,
         /* Get the URL for that image */
         let imageURL = imageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String {
-        searchResult.imageURL = imageURL
+        searchResult.smallImageURL = imageURL
       }
       
       /* Get the external url dictionary */
@@ -137,7 +143,7 @@ class ParseItems {
         let imageURLDictionary = imagesArray.last,
         /* Get the URL for that image */
         let imageURL = imageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String {
-        searchResult.imageURL = imageURL
+        searchResult.smallImageURL = imageURL
       }
       
       /* Get the external url dictionary */
@@ -177,7 +183,7 @@ class ParseItems {
         let imageURLDictionary = imagesArray.last,
         /* Get the URL for that image */
         let imageURL = imageURLDictionary[Constants.SpotifyResponseKeys.ImageURL] as? String {
-        searchResult.imageURL = imageURL
+        searchResult.smallImageURL = imageURL
       }
       
       /* Get the 'tracks' dictionary to extract the number of tracks in the playlist */

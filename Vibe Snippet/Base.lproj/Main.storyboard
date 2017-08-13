@@ -9,6 +9,90 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Artist Detail View Controller-->
+        <scene sceneID="t3R-Yb-yZW">
+            <objects>
+                <viewController id="HdR-qL-sxA" customClass="ArtistDetailViewController" customModule="Vibe_Snippet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2ey-7P-K7F"/>
+                        <viewControllerLayoutGuide type="bottom" id="Dfo-GE-d0P"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Bh6-oc-yK5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="990-rP-k0Q">
+                                <rect key="frame" x="40" y="124" width="240" height="320"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zao-UL-b0a">
+                                        <rect key="frame" x="3" y="0.0" width="15" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="CloseButton"/>
+                                        <connections>
+                                            <action selector="close" destination="HdR-qL-sxA" eventType="touchUpInside" id="qoR-4L-XyP"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="320" id="8U2-2U-AUi"/>
+                                    <constraint firstAttribute="width" constant="240" id="PCL-1S-mrk"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="990-rP-k0Q" firstAttribute="centerY" secondItem="Bh6-oc-yK5" secondAttribute="centerY" id="8M8-I5-bRK"/>
+                            <constraint firstItem="990-rP-k0Q" firstAttribute="centerX" secondItem="Bh6-oc-yK5" secondAttribute="centerX" id="S5Q-n0-DhB"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lY5-CF-wrf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="943" y="-511"/>
+        </scene>
+        <!--Album Detail View Controller-->
+        <scene sceneID="jp3-Y9-flo">
+            <objects>
+                <viewController id="hr9-lj-Vhe" customClass="AlbumDetailViewController" customModule="Vibe_Snippet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="v0g-Lo-f71"/>
+                        <viewControllerLayoutGuide type="bottom" id="F8K-yW-oti"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tgt-Lo-6qg">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l68-Fm-Q2f">
+                                <rect key="frame" x="40" y="124" width="240" height="320"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Qj-nc-ruq">
+                                        <rect key="frame" x="3" y="0.0" width="15" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="CloseButton"/>
+                                        <connections>
+                                            <action selector="close" destination="hr9-lj-Vhe" eventType="touchUpInside" id="xuV-rE-QXa"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="320" id="1lM-0s-dz2"/>
+                                    <constraint firstAttribute="width" constant="240" id="cIu-nh-MR0"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="l68-Fm-Q2f" firstAttribute="centerX" secondItem="tgt-Lo-6qg" secondAttribute="centerX" id="FOs-H2-RqR"/>
+                            <constraint firstItem="l68-Fm-Q2f" firstAttribute="centerY" secondItem="tgt-Lo-6qg" secondAttribute="centerY" id="K3u-Pq-lCX"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gUR-60-voB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1749" y="-211"/>
+        </scene>
         <!--Search View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -42,7 +126,7 @@
                                     <navigationItem id="srv-Wm-RvC">
                                         <nil key="title"/>
                                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="G8Z-Cb-E9Q">
-                                            <rect key="frame" x="10" y="7.5" width="300" height="30"/>
+                                            <rect key="frame" x="10" y="7" width="300" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Tracks"/>
@@ -76,11 +160,170 @@
                         <outlet property="searchBar" destination="GM7-m1-eKZ" id="h9y-ay-ebe"/>
                         <outlet property="segmentedControl" destination="G8Z-Cb-E9Q" id="OW8-Af-fDJ"/>
                         <outlet property="tableView" destination="bCp-zm-oip" id="UB9-um-Ydy"/>
+                        <segue destination="16p-Vj-xrj" kind="presentation" identifier="ShowDetailsForTrack" id="WEV-Qf-oEx"/>
+                        <segue destination="HdR-qL-sxA" kind="presentation" identifier="ShowDetailsForArtist" id="zXo-6E-OUP"/>
+                        <segue destination="hr9-lj-Vhe" kind="presentation" identifier="ShowDetailsForAlbum" id="mw0-Zw-CCA"/>
+                        <segue destination="Olf-hD-9dq" kind="presentation" identifier="ShowDetailsForPlaylist" id="c9w-Am-RIV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.875" y="138.38028169014083"/>
         </scene>
+        <!--Playlist Detail View Controller-->
+        <scene sceneID="4VS-cJ-SyN">
+            <objects>
+                <viewController id="Olf-hD-9dq" customClass="PlaylistDetailViewController" customModule="Vibe_Snippet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="SsO-Zl-ucN"/>
+                        <viewControllerLayoutGuide type="bottom" id="ald-Ej-M2d"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eHO-Sc-09V">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fwv-Nb-rdD">
+                                <rect key="frame" x="40" y="124" width="240" height="320"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukt-sP-sSX">
+                                        <rect key="frame" x="3" y="0.0" width="15" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="CloseButton"/>
+                                        <connections>
+                                            <action selector="close" destination="Olf-hD-9dq" eventType="touchUpInside" id="tNy-Mk-f6j"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="320" id="VDZ-v5-xgP"/>
+                                    <constraint firstAttribute="width" constant="240" id="fkL-S5-lRN"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="fwv-Nb-rdD" firstAttribute="centerX" secondItem="eHO-Sc-09V" secondAttribute="centerX" id="DzQ-Rf-MC6"/>
+                            <constraint firstItem="fwv-Nb-rdD" firstAttribute="centerY" secondItem="eHO-Sc-09V" secondAttribute="centerY" id="hCc-Wk-nTa"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pfs-dg-qZd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="941" y="799"/>
+        </scene>
+        <!--Track Detail View Controller-->
+        <scene sceneID="gO2-uX-QdX">
+            <objects>
+                <viewController id="16p-Vj-xrj" customClass="TrackDetailViewController" customModule="Vibe_Snippet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Oib-7W-FVx"/>
+                        <viewControllerLayoutGuide type="bottom" id="qr9-yP-rRr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4fn-m2-iNx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lVR-tg-nvQ" userLabel="Pop-up View">
+                                <rect key="frame" x="40" y="124" width="240" height="320"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a3D-Uq-E5m" userLabel="Close Button">
+                                        <rect key="frame" x="3" y="0.0" width="15" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="CloseButton"/>
+                                        <connections>
+                                            <action selector="close" destination="16p-Vj-xrj" eventType="touchUpInside" id="goz-vJ-er1"/>
+                                        </connections>
+                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVL-qr-QMW">
+                                        <rect key="frame" x="70" y="7" width="110" height="110"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.29999999999999999" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XyZ-Yl-5A6">
+                                        <rect key="frame" x="10" y="120" width="220" height="24"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lky-Oo-aee">
+                                        <rect key="frame" x="10" y="147" width="220" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Popularity:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Epj-lm-aCS">
+                                        <rect key="frame" x="10" y="171" width="88" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFQ-NG-3wo">
+                                        <rect key="frame" x="15" y="300" width="127" height="2"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </progressView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="100% of 1.25MB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VYF-UG-pLO">
+                                        <rect key="frame" x="148" y="291" width="84" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MAa-AU-tXz">
+                                        <rect key="frame" x="47" y="234" width="46" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                        <state key="normal" title="Download"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wus-bw-Ct3">
+                                        <rect key="frame" x="148" y="234" width="46" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Play">
+                                            <color key="titleColor" red="0.04052734375" green="0.58930121527777779" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Popularity Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nHJ-SG-uSv">
+                                        <rect key="frame" x="100" y="171" width="130" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.9511183647260274" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="eBC-bT-aos"/>
+                                    <constraint firstAttribute="height" constant="320" id="kkn-YA-nn7"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="lVR-tg-nvQ" firstAttribute="centerY" secondItem="4fn-m2-iNx" secondAttribute="centerY" id="Lye-rg-S3y"/>
+                            <constraint firstItem="lVR-tg-nvQ" firstAttribute="centerX" secondItem="4fn-m2-iNx" secondAttribute="centerX" id="f3Y-k5-XpO"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="artistNameLabel" destination="Lky-Oo-aee" id="ZJG-a5-MUN"/>
+                        <outlet property="artworkImageView" destination="DVL-qr-QMW" id="M0O-Es-1r2"/>
+                        <outlet property="downloadButton" destination="MAa-AU-tXz" id="yG2-OT-wOu"/>
+                        <outlet property="downloadProgressLabel" destination="VYF-UG-pLO" id="KEP-Ja-k1a"/>
+                        <outlet property="downloadProgressView" destination="xFQ-NG-3wo" id="uO1-1S-4RL"/>
+                        <outlet property="playButton" destination="wus-bw-Ct3" id="xcL-eO-BzL"/>
+                        <outlet property="popularityValueLabel" destination="nHJ-SG-uSv" id="LIh-K6-9zy"/>
+                        <outlet property="popupView" destination="lVR-tg-nvQ" id="2pk-nG-sbv"/>
+                        <outlet property="trackNameLabel" destination="XyZ-Yl-5A6" id="0C1-To-i01"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kiA-BN-DeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1748" y="458"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="CloseButton" width="15" height="15"/>
+    </resources>
 </document>

@@ -25,7 +25,7 @@ class SearchResult {
   var playlistOwner = ""
   var followers = 0
   var artistPopularity = 0
-  var genres: [String?] = []
+  var genres: [String] = []
 }
 
 // Sort the search results alphabetically - by the track name

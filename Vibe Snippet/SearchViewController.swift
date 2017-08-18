@@ -89,17 +89,31 @@ class SearchViewController: UIViewController {
         let indexPath = sender as! IndexPath
         let searchResult = search.searchResults[indexPath.row]
         trackDetailViewController.searchResult = searchResult
+     
       case Constants.SegueIdentifiers.ArtistSegue:
         let artistDetailViewController = segue.destination as! ArtistDetailViewController
         let indexPath = sender as! IndexPath
         let searchResult = search.searchResults[indexPath.row]
+        artistDetailViewController.searchResult = searchResult
+      
+      case Constants.SegueIdentifiers.AlbumSegue:
+        let albumDetailViewController = segue.destination as! AlbumDetailViewController
+        let indexPath = sender as! IndexPath
+        let searchResult = search.searchResults[indexPath.row]
+        albumDetailViewController.searchResult = searchResult
+      
+      case Constants.SegueIdentifiers.PlaylistSegue:
+        let playlistDetailViewController = segue.destination as! PlaylistDetailViewController
+        let indexPath = sender as! IndexPath
+        let searchResult = search.searchResults[indexPath.row]
+        playlistDetailViewController.searchResult = searchResult
+      
       default:
         break
       }
     }
   }
 }
-
 
 // MARK: UISearchBarDelegate
 

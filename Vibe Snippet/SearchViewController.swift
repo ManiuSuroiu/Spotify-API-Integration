@@ -16,7 +16,7 @@ class SearchViewController: UIViewController {
   @IBOutlet weak var segmentedControl: UISegmentedControl!
   
   // MARK: Properties
-  let search = Search()
+  let searchQuery = SearchQuery()
   
   // MARK: IBActions
   @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -50,8 +50,8 @@ class SearchViewController: UIViewController {
   
   // MARK: Show a network error alert to the user
   func showNetworkError() {
-    let alert = UIAlertController(title: "Whoops...",
-                                  message: "There was an error reading from Spotify. Please try again.",
+    let alert = UIAlertController(title: nil,
+                                  message: "The Internet connection appears to be offline.",
                                   preferredStyle: .alert)
     let action = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(action)
@@ -63,8 +63,8 @@ class SearchViewController: UIViewController {
   func performSearch() {
     
     /* Convert the selected segment index into a Category value */
-    if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
-      search.performSearch(text: searchBar.text!, category: category) { searchComplete in
+    if let category = SearchQuery.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+      searchQuery.performSearch(text: searchBar.text!, category: category) { searchComplete in
         
         /* Use the completion handler's boolean value to determine whether the search was successful or not. If its value is 'false' show the network error to the user */
         if !searchComplete {
@@ -87,25 +87,25 @@ class SearchViewController: UIViewController {
       case Constants.SegueIdentifiers.TrackSegue:
         let trackDetailViewController = segue.destination as! TrackDetailViewController
         let indexPath = sender as! IndexPath
-        let searchResult = search.searchResults[indexPath.row]
+        let searchResult = searchQuery.searchResults[indexPath.row]
         trackDetailViewController.searchResult = searchResult
      
       case Constants.SegueIdentifiers.ArtistSegue:
         let artistDetailViewController = segue.destination as! ArtistDetailViewController
         let indexPath = sender as! IndexPath
-        let searchResult = search.searchResults[indexPath.row]
+        let searchResult = searchQuery.searchResults[indexPath.row]
         artistDetailViewController.searchResult = searchResult
       
       case Constants.SegueIdentifiers.AlbumSegue:
         let albumDetailViewController = segue.destination as! AlbumDetailViewController
         let indexPath = sender as! IndexPath
-        let searchResult = search.searchResults[indexPath.row]
+        let searchResult = searchQuery.searchResults[indexPath.row]
         albumDetailViewController.searchResult = searchResult
       
       case Constants.SegueIdentifiers.PlaylistSegue:
         let playlistDetailViewController = segue.destination as! PlaylistDetailViewController
         let indexPath = sender as! IndexPath
-        let searchResult = search.searchResults[indexPath.row]
+        let searchResult = searchQuery.searchResults[indexPath.row]
         playlistDetailViewController.searchResult = searchResult
       
       default:
@@ -134,14 +134,14 @@ extension SearchViewController: UISearchBarDelegate {
 extension SearchViewController: UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    if search.isLoading {
+    if searchQuery.isLoading {
       return 1
-    } else if !search.hasSearched {
+    } else if !searchQuery.hasSearched {
       return 0
-    } else if search.searchResults.count == 0 {
+    } else if searchQuery.searchResults.count == 0 {
       return 1
     } else {
-      return search.searchResults.count
+      return searchQuery.searchResults.count
     }
   }
   
@@ -149,22 +149,22 @@ extension SearchViewController: UITableViewDataSource {
     
     // Handling the three possible scenarios:
     /* 1. Returns one cell, the LoadingCell, showing the user that data is being retrieved from the Spotify server */
-    if search.isLoading {
+    if searchQuery.isLoading {
       let cell = tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.LoadingCell, for: indexPath)
       let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
       spinner.startAnimating()
       return cell
       
     /* 2. Also returns one cell, the NothingFoundCell, showing the user that no data matches her search */
-    } else if search.searchResults.count == 0 {
+    } else if searchQuery.searchResults.count == 0 {
       return tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.NothingFoundCell, for: indexPath)
     
       /* 3.Returns cells populated with searchResult objects, upon a successful search */
     } else {
       let cell = tableView.dequeueReusableCell(withIdentifier: Constants.TableViewCellIdentifiers.SearchResultCell, for: indexPath) as! SearchResultCell
-      let searchResult = search.searchResults[indexPath.row]
+      let searchResult = searchQuery.searchResults[indexPath.row]
       
-      if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+      if let category = SearchQuery.Category(rawValue: segmentedControl.selectedSegmentIndex) {
         cell.configure(for: searchResult, category: category)
       }
       return cell
@@ -179,7 +179,7 @@ extension SearchViewController: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     tableView.deselectRow(at: indexPath, animated: true)
     
-    if let category = Search.Category(rawValue: segmentedControl.selectedSegmentIndex) {
+    if let category = SearchQuery.Category(rawValue: segmentedControl.selectedSegmentIndex) {
       
       switch category {
       case .tracks:
@@ -195,7 +195,7 @@ extension SearchViewController: UITableViewDelegate {
   }
   
   func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-    if search.searchResults.count == 0 || search.isLoading {
+    if searchQuery.searchResults.count == 0 || searchQuery.isLoading {
       return nil
     } else {
       return indexPath

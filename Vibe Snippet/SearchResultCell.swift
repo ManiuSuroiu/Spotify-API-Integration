@@ -51,7 +51,7 @@ class SearchResultCell: UITableViewCell {
   }
   
   // MARK: Configure the cell's labels according to the type of search. Call it from UITableViewDataSource method tableView(cellForRowAt:) in SearchViewController
-  func configure(for searchResult: SearchResult, category: Search.Category) {
+  func configure(for searchResult: SearchResult, category: SearchQuery.Category) {
     
     /* Match the appropriate case to the selected integer value of the segmentedControl */
     switch category {

@@ -417,24 +417,6 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFQ-NG-3wo">
-                                        <rect key="frame" x="15" y="296" width="127" height="2"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </progressView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MAa-AU-tXz">
-                                        <rect key="frame" x="47" y="234" width="46" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                        <state key="normal" title="Download"/>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wus-bw-Ct3">
-                                        <rect key="frame" x="148" y="234" width="46" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <state key="normal" title="Play">
-                                            <color key="titleColor" red="0.04052734375" green="0.58930121527777779" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Popularity Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nHJ-SG-uSv">
                                         <rect key="frame" x="103" y="191" width="125" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -442,13 +424,17 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="100% of 1.25MB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VYF-UG-pLO">
-                                        <rect key="frame" x="150" y="287" width="84" height="21"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wus-bw-Ct3">
+                                        <rect key="frame" x="97" y="246" width="46" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <state key="normal" title="Play">
+                                            <color key="titleColor" red="0.04052734375" green="0.58930121527777779" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="playTapped:" destination="16p-Vj-xrj" eventType="touchUpInside" id="qbe-YJ-sUn"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="0.9511183647260274" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -466,9 +452,6 @@
                     <connections>
                         <outlet property="artistNameLabel" destination="Lky-Oo-aee" id="ZJG-a5-MUN"/>
                         <outlet property="artworkImageView" destination="DVL-qr-QMW" id="M0O-Es-1r2"/>
-                        <outlet property="downloadButton" destination="MAa-AU-tXz" id="yG2-OT-wOu"/>
-                        <outlet property="downloadProgressLabel" destination="VYF-UG-pLO" id="KEP-Ja-k1a"/>
-                        <outlet property="downloadProgressView" destination="xFQ-NG-3wo" id="uO1-1S-4RL"/>
                         <outlet property="playButton" destination="wus-bw-Ct3" id="xcL-eO-BzL"/>
                         <outlet property="popularityValueLabel" destination="nHJ-SG-uSv" id="LIh-K6-9zy"/>
                         <outlet property="popupView" destination="lVR-tg-nvQ" id="2pk-nG-sbv"/>

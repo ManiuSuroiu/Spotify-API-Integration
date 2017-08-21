@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Search {
+class SearchQuery {
   
   // MARK: Properties
   var searchResults: [SearchResult] = []
@@ -193,7 +193,7 @@ class Search {
   }
   
   // MARK: Parse the top-level dictionary returned by parse(json) and return the array of dictionaries where all the data sits
-  func parse(dictionary: [String: AnyObject], category: Category) -> [[String: AnyObject]]? {
+  private func parse(dictionary: [String: AnyObject], category: Category) -> [[String: AnyObject]]? {
     
     /* Determine which top-level dictionary to parse */
     switch category {
@@ -275,7 +275,7 @@ class Search {
           
           self.accessToken = accessToken
           
-          self.performSpotifySearch(searchText: text, category: Search.Category(rawValue: category.rawValue)!) { success in
+          self.performSpotifySearch(searchText: text, category: Category(rawValue: category.rawValue)!) { success in
             
             if success {
               /* Update the UI on the main thread: hide the activity indicator cell and set the completion handler to true */
@@ -286,7 +286,7 @@ class Search {
             }
           }
         } else {
-          /* If the request authorization fails, hide the activity indicator cell, reload the data in the table and show the user the error message */
+          /* If the request authorization fails, hide the activity indicator cell, reload the data in the table and show the error message to user */
           DispatchQueue.main.async {
             self.hasSearched = false
             self.isLoading = false

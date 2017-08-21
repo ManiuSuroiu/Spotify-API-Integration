@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVKit
+import AVFoundation
 
 class TrackDetailViewController: UIViewController {
   
@@ -16,14 +18,12 @@ class TrackDetailViewController: UIViewController {
   @IBOutlet weak var trackNameLabel: UILabel!
   @IBOutlet weak var artistNameLabel: UILabel!
   @IBOutlet weak var popularityValueLabel: UILabel!
-  @IBOutlet weak var downloadButton: UIButton!
   @IBOutlet weak var playButton: UIButton!
-  @IBOutlet weak var pauseDownloadButton: UIButton!
-  @IBOutlet weak var cancelDownloadButton: UIButton!
-  @IBOutlet weak var downloadProgressView: UIProgressView!
-  @IBOutlet weak var downloadProgressLabel: UILabel!
   
+  /* Reference needed to populate the UI */
   var searchResult: SearchResult!
+  
+  /* Download task for downloading the image */
   private var downloadTask: URLSessionDownloadTask?
   
   override func viewDidLoad() {
@@ -58,6 +58,15 @@ class TrackDetailViewController: UIViewController {
     dismiss(animated: true, completion: nil)
   }
   
+  @IBAction func playTapped(_ sender: AnyObject) {
+    
+    if let _ = URL(string: searchResult.previewURL) {
+      playSnippet()
+    } else {
+      snippetUnavailable()
+    }
+  }
+  
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     modalPresentationStyle = .custom
@@ -72,6 +81,29 @@ class TrackDetailViewController: UIViewController {
     if let imageURL = URL(string: searchResult.largeImageURL) {
       downloadTask = artworkImageView.loadImage(url: imageURL)
     }
+  }
+  
+  func playSnippet() {
+    let playerViewController = AVPlayerViewController()
+    present(playerViewController, animated: true, completion: nil)
+    
+    let url = URL(string: searchResult.previewURL)
+    let player = AVPlayer(url: url!) /* it is safe to force unwrap it as this block will never get executed if the url is nil (optional-binded in the playTapped() above) */
+    playerViewController.player = player
+    player.play()
+  }
+  
+  /* Show the alert to the user when the previewURL is not availabe */
+  func snippetUnavailable() {
+    let alert = UIAlertController(title: nil,
+                                  message: "Snippet unavailable for this track. Please try something else.",
+                                  preferredStyle: .alert)
+    let action = UIAlertAction(title: "OK", style: .default, handler: { _ in
+      self.close() /* dismiss the popupView once the user presses ok */
+    })
+    
+    alert.addAction(action)
+    present(alert, animated: true, completion: nil)
   }
 }
 

@@ -25,6 +25,14 @@ class AlbumDetailViewController: UIViewController {
 
     popupView.layer.cornerRadius = 10
     
+    /* Customize UIButton */
+    takeMeToSpotify.layer.cornerRadius = 20
+    takeMeToSpotify.layer.masksToBounds = true
+    takeMeToSpotify.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.3)
+    takeMeToSpotify.setBackgroundColor(color: .init(red: 10/255, green: 150/255, blue: 255/255, alpha: 1),
+                                       for: .highlighted)
+    
+    /* Gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
     let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(close))
     gestureRecognizer.cancelsTouchesInView = false
     gestureRecognizer.delegate = self

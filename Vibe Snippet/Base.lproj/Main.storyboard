@@ -57,24 +57,23 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Genres:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gK0-17-xBS">
-                                        <rect key="frame" x="10" y="207" width="78" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Genre:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gK0-17-xBS">
+                                        <rect key="frame" x="10" y="209" width="78" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Genres Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="g3f-FL-zaO">
-                                        <rect key="frame" x="93" y="207" width="140" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Genre Value" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.10000000000000001" translatesAutoresizingMaskIntoConstraints="NO" id="g3f-FL-zaO">
+                                        <rect key="frame" x="93" y="185" width="140" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cf-yz-deD">
-                                        <rect key="frame" x="97" y="263" width="46" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cf-yz-deD">
+                                        <rect key="frame" x="50" y="250" width="142" height="42"/>
+                                        <state key="normal" image="Spotify_Logo_RGB_Black.005.jpg"/>
+                                        <state key="highlighted" backgroundImage="Spotify_Logo_RGB_Green"/>
                                         <connections>
                                             <action selector="openSpotify" destination="HdR-qL-sxA" eventType="touchUpInside" id="ocH-ng-cWH"/>
                                         </connections>
@@ -83,7 +82,11 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="320" id="8U2-2U-AUi"/>
+                                    <constraint firstItem="9cf-yz-deD" firstAttribute="top" secondItem="gK0-17-xBS" secondAttribute="bottom" constant="20" id="Blv-AM-q9V"/>
                                     <constraint firstAttribute="width" constant="240" id="PCL-1S-mrk"/>
+                                    <constraint firstAttribute="trailing" secondItem="9cf-yz-deD" secondAttribute="trailing" constant="48" id="RPO-lC-dyH"/>
+                                    <constraint firstAttribute="bottom" secondItem="9cf-yz-deD" secondAttribute="bottom" constant="28" id="TDF-kA-EcO"/>
+                                    <constraint firstItem="9cf-yz-deD" firstAttribute="leading" secondItem="990-rP-k0Q" secondAttribute="leading" constant="50" id="eWw-Ft-2XX"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -96,7 +99,7 @@
                     <connections>
                         <outlet property="artistNameLabel" destination="xTw-O3-ELl" id="uFy-Z3-9BK"/>
                         <outlet property="artworkImageView" destination="pQn-0Q-FFJ" id="Dxt-42-3mj"/>
-                        <outlet property="genresLabel" destination="g3f-FL-zaO" id="BIE-Wx-Ki2"/>
+                        <outlet property="genreLabel" destination="g3f-FL-zaO" id="Jwa-7A-yHW"/>
                         <outlet property="numberOfFollowersLabel" destination="Us1-F9-ggf" id="gAv-Yz-WVJ"/>
                         <outlet property="popupView" destination="990-rP-k0Q" id="tDc-FF-5nU"/>
                         <outlet property="takeMeToSpotify" destination="9cf-yz-deD" id="Sxo-85-1kr"/>
@@ -161,6 +164,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTi-Vp-Q6z">
+                                        <rect key="frame" x="49" y="247" width="142" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="Spotify_Logo_RGB_Black.005.jpg"/>
+                                        <connections>
+                                            <action selector="openSpotify" destination="hr9-lj-Vhe" eventType="touchUpInside" id="8xw-xg-nq2"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -168,14 +179,6 @@
                                     <constraint firstAttribute="width" constant="240" id="cIu-nh-MR0"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yTi-Vp-Q6z">
-                                <rect key="frame" x="137" y="377" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="openSpotify" destination="hr9-lj-Vhe" eventType="touchUpInside" id="8xw-xg-nq2"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -334,6 +337,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khB-1C-YA7">
+                                        <rect key="frame" x="49" y="254" width="142" height="42"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="Spotify_Logo_RGB_Black.005.jpg"/>
+                                        <connections>
+                                            <action selector="openSpotify" destination="Olf-hD-9dq" eventType="touchUpInside" id="FzQ-86-aob"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -341,14 +352,6 @@
                                     <constraint firstAttribute="width" constant="240" id="fkL-S5-lRN"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khB-1C-YA7">
-                                <rect key="frame" x="137" y="385" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="openSpotify" destination="Olf-hD-9dq" eventType="touchUpInside" id="FzQ-86-aob"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -424,11 +427,10 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wus-bw-Ct3">
-                                        <rect key="frame" x="97" y="246" width="46" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wus-bw-Ct3">
+                                        <rect key="frame" x="89" y="230" width="62" height="62"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <state key="normal" title="Play">
+                                        <state key="normal" image="Play.Button.jpg">
                                             <color key="titleColor" red="0.04052734375" green="0.58930121527777779" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -465,5 +467,8 @@
     </scenes>
     <resources>
         <image name="CloseButton" width="15" height="15"/>
+        <image name="Play.Button.jpg" width="62" height="62"/>
+        <image name="Spotify_Logo_RGB_Black.005.jpg" width="141" height="42"/>
+        <image name="Spotify_Logo_RGB_Green" width="141" height="42"/>
     </resources>
 </document>

@@ -14,7 +14,7 @@ class ArtistDetailViewController: UIViewController {
   @IBOutlet weak var artworkImageView: UIImageView!
   @IBOutlet weak var artistNameLabel: UILabel!
   @IBOutlet weak var numberOfFollowersLabel: UILabel!
-  @IBOutlet weak var genresLabel: UILabel!
+  @IBOutlet weak var genreLabel: UILabel!
   @IBOutlet weak var takeMeToSpotify: UIButton!
   
   var searchResult: SearchResult!
@@ -26,6 +26,14 @@ class ArtistDetailViewController: UIViewController {
 
     popupView.layer.cornerRadius = 10
     
+    /* Customize UIButton */
+    takeMeToSpotify.layer.cornerRadius = 20
+    takeMeToSpotify.layer.masksToBounds = true
+    takeMeToSpotify.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.3)
+    takeMeToSpotify.setBackgroundColor(color: .init(red: 10/255, green: 150/255, blue: 255/255, alpha: 1),
+                                       for: .highlighted)
+    
+    /* Gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
     let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(close))
     gestureRecognizer.cancelsTouchesInView = false
     gestureRecognizer.delegate = self
@@ -35,7 +43,7 @@ class ArtistDetailViewController: UIViewController {
       updateUI()
     }
   }
-
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
@@ -67,9 +75,9 @@ class ArtistDetailViewController: UIViewController {
     numberOfFollowersLabel.text = "\(searchResult.followers)"
     
     if searchResult.genres.isEmpty {
-      genresLabel.text = "Unknown"
+      genreLabel.text = "Unknown"
     } else {
-      genresLabel.text = String(format: "%@", searchResult.genres.first!).uppercased()
+      genreLabel.text = String(format: "%@", searchResult.genres.first!).capitalized
     }
     
     if let imageURL = URL(string: searchResult.largeImageURL) {
@@ -98,6 +106,7 @@ extension ArtistDetailViewController: UIGestureRecognizerDelegate {
     return (touch.view === self.view)
   }
 }
+
 
 
 

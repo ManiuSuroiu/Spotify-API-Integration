@@ -33,12 +33,28 @@ class TrackDetailViewController: UIViewController {
     /* Makes the corners of the view rounded */
     popupView.layer.cornerRadius = 10
     
-    /* Make the gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
+    // MARK: UIButton customization
+    
+    /* Make its corners rounded */
+    playButton.layer.cornerRadius = 10
+    
+    /* Make the background image created for the highlighted state of the button take the same shape as the button (round corners) */
+    playButton.layer.masksToBounds = true
+    
+    /* Set the background color in its default state */
+    playButton.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.3)
+    
+    /* Set the background color in its highlighted state using the UIButton extension */
+    playButton.setBackgroundColor(color: .init(red: 10/255, green: 150/255, blue: 255/255, alpha: 1),
+                                  for: .highlighted)
+    
+    /* Gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
     let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(close))
     gestureRecognizer.cancelsTouchesInView = false
     gestureRecognizer.delegate = self
     view.addGestureRecognizer(gestureRecognizer)
     
+    /* Optional-bind the searchResult, if not nil (the SearchResult has been successfuly populated with parsed JSON) update the UI */
     if let _ = searchResult {
       updateUI()
     }

@@ -71,7 +71,7 @@ class AlbumDetailViewController: UIViewController {
   
   func updateUI() {
     albumNameLabel.text = searchResult.albumName
-    artistNameLabel.text = searchResult.artistName
+    artistNameLabel.text = "By: \(searchResult.artistName)"
     
     if let imageURL = URL(string: searchResult.largeImageURL) {
       downloadTask = artworkImageView.loadImage(url: imageURL)

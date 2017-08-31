@@ -23,7 +23,8 @@ class PlaylistDetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.tintColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 1)
-
+    view.backgroundColor = UIColor.clear
+    
     popupView.layer.cornerRadius = 10
     
     /* Customize UIButton */

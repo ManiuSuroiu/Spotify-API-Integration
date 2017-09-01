@@ -20,6 +20,15 @@ class TrackDetailViewController: UIViewController {
   @IBOutlet weak var popularityValueLabel: UILabel!
   @IBOutlet weak var playButton: UIButton!
   
+  /* Enum containing the two types of animation */
+  enum AnimationStyle {
+    case slide
+    case fade
+  }
+  
+  /* Needed to determine which animation is chosen. By default it is .fade - the one used when rotating to landscape */
+  var dismissAnimationStyle = AnimationStyle.fade
+  
   /* Reference needed to populate the UI */
   var searchResult: SearchResult!
   
@@ -72,6 +81,7 @@ class TrackDetailViewController: UIViewController {
   }
   
   @IBAction func close() {
+    dismissAnimationStyle = .slide
     dismiss(animated: true, completion: nil)
   }
   
@@ -144,7 +154,13 @@ extension TrackDetailViewController: UIViewControllerTransitioningDelegate {
   
   /* Present the transition animator object when dismissing the vc */
   func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    return SlideOutAnimationController()
+    
+    switch dismissAnimationStyle {
+    case .slide:
+      return SlideOutAnimationController()
+    case .fade:
+      return FadeOutAnimationController()
+    }
   }
 }
 

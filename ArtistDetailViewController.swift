@@ -17,6 +17,12 @@ class ArtistDetailViewController: UIViewController {
   @IBOutlet weak var genreLabel: UILabel!
   @IBOutlet weak var takeMeToSpotify: UIButton!
   
+  enum AnimationStyle {
+    case slide
+    case fade
+  }
+  
+  var dismissAnimationStyle = AnimationStyle.fade
   var searchResult: SearchResult!
   private var downloadTask: URLSessionDownloadTask?
   
@@ -62,6 +68,7 @@ class ArtistDetailViewController: UIViewController {
   }
   
   @IBAction func close() {
+    dismissAnimationStyle = .slide
     dismiss(animated: true, completion: nil)
   }
   
@@ -106,7 +113,13 @@ extension ArtistDetailViewController: UIViewControllerTransitioningDelegate {
   
   /* Present the transition animator object when dismissing the vc */
   func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    return SlideOutAnimationController()
+    
+    switch dismissAnimationStyle {
+    case .slide:
+      return SlideOutAnimationController()
+    case .fade:
+      return FadeOutAnimationController()
+    }
   }
 }
 

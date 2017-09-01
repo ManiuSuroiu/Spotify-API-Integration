@@ -23,6 +23,21 @@ class DimmingPresentationController: UIPresentationController {
     /* Make the gradient view as big as the container view */
     dimmingView.frame = containerView!.bounds
     containerView!.insertSubview(dimmingView, at: 0)
+    
+    /* Make the GradientView fade in while the pop-up bounces into view */
+    dimmingView.alpha = 0
+    if let coordinator = presentedViewController.transitionCoordinator {
+      coordinator.animate(alongsideTransition: { _ in self.dimmingView.alpha = 1 },
+                          completion: nil)
+    }
+  }
+  
+  /* Animate the GradientView out of sight when the pop-up is dismissed */
+  override func dismissalTransitionWillBegin() {
+    if let coordinator = presentedViewController.transitionCoordinator {
+      coordinator.animate(alongsideTransition: { _ in self.dimmingView.alpha = 0 },
+                          completion: nil)
+    }
   }
 }
 

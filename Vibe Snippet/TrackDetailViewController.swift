@@ -128,11 +128,23 @@ class TrackDetailViewController: UIViewController {
 
 extension TrackDetailViewController: UIViewControllerTransitioningDelegate {
   
-  /* The transition from SearchViewController to DetailViewController will be performed by the DimmingViewController rather than a standard presentation controller */
+  /* The transition from SearchViewController to TrackDetailViewController will be performed by the DimmingViewController rather than a standard presentation controller */
   func presentationController(forPresented presented: UIViewController,
                               presenting: UIViewController?,
                               source: UIViewController) -> UIPresentationController? {
     return DimmingPresentationController(presentedViewController: presented, presenting: presenting)
+  }
+  
+  /* Present the transition animator object when presenting the vc */
+  func animationController(forPresented presented: UIViewController,
+                           presenting: UIViewController,
+                           source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return BounceAnimationController()
+  }
+  
+  /* Present the transition animator object when dismissing the vc */
+  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return SlideOutAnimationController()
   }
 }
 

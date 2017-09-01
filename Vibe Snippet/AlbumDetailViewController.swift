@@ -90,6 +90,18 @@ extension AlbumDetailViewController: UIViewControllerTransitioningDelegate {
                               source: UIViewController) -> UIPresentationController? {
     return DimmingPresentationController(presentedViewController: presented, presenting: presenting)
   }
+  
+  /* Present the transition animator object */
+  func animationController(forPresented presented: UIViewController,
+                           presenting: UIViewController,
+                           source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return BounceAnimationController()
+  }
+  
+  /* Present the transition animator object when dismissing the vc */
+  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return SlideOutAnimationController()
+  }
 }
 
 // MARK: UIGestureRecognizerDelegate

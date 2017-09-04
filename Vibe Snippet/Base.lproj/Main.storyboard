@@ -314,19 +314,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YQs-Rj-EEx">
-                                <rect key="frame" x="306.5" y="170" width="54" height="35"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" pagingEnabled="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LSj-75-N8P">
+                                <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="dfD-e0-nek" id="ceg-cP-2lH"/>
+                                </connections>
+                            </scrollView>
+                            <pageControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="TZE-HG-VMT">
+                                <rect key="frame" x="294" y="269" width="78" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="pageChanged:" destination="dfD-e0-nek" eventType="valueChanged" id="LpZ-sR-6z8"/>
+                                </connections>
+                            </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="YQs-Rj-EEx" firstAttribute="centerX" secondItem="5uH-SC-I78" secondAttribute="centerX" id="fbG-D9-PGb"/>
-                            <constraint firstItem="YQs-Rj-EEx" firstAttribute="centerY" secondItem="5uH-SC-I78" secondAttribute="centerY" id="tU7-rB-Ddh"/>
-                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="pageControl" destination="TZE-HG-VMT" id="OZa-iZ-qGM"/>
+                        <outlet property="scrollView" destination="LSj-75-N8P" id="4iJ-YN-cab"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uyC-6n-oNO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

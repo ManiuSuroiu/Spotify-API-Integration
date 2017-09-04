@@ -139,6 +139,7 @@ class SearchViewController: UIViewController {
     
     /* Optional-bind the landscapeViewController */
     if let controller = landscapeViewController {
+      controller.searchResults = searchQuery.searchResults
       /* Set the size and position of the new VC  - SearchViewController's view is the superview thus the frame of the landscape must be set equal to the SearchViewController's bounds */
       controller.view.frame = view.bounds
       /* Make the view completely transparent as the screen begins rotating */

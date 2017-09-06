@@ -17,6 +17,7 @@ class SearchViewController: UIViewController {
   
   // MARK: Properties
   let searchQuery = SearchQuery()
+  var landscapeViewController: LandscapeViewController?
   
   // MARK: IBActions
   @IBAction func segmentChanged(_ sender: UISegmentedControl) {
@@ -111,6 +112,73 @@ class SearchViewController: UIViewController {
       default:
         break
       }
+    }
+  }
+  
+  // MARK: willTransition(to:with:) invoked when the device is flipped over
+  override func willTransition(to newCollection: UITraitCollection,
+                               with coordinator: UIViewControllerTransitionCoordinator) {
+    super.willTransition(to: newCollection, with: coordinator)
+    
+    switch newCollection.verticalSizeClass {
+    case .compact:
+      showLandscape(with: coordinator)
+    case .regular, .unspecified:
+      hideLandscape(with: coordinator)
+    }
+  }
+  
+  // MARK: showLandscape(with:) - instantiate LandscapeViewController programmatically by adding it to SearchViewController as a child
+  func showLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
+    
+    /* Ensure the app doesn't instantiate a second landscape when the user is already looking at one */
+    guard landscapeViewController == nil else { return }
+    
+    /* Instantiate the LandscapeViewController from storyboards by its identifier (no segue) */
+    landscapeViewController = storyboard!.instantiateViewController(withIdentifier: "LandscapeViewController") as? LandscapeViewController
+    
+    /* Optional-bind the landscapeViewController */
+    if let controller = landscapeViewController {
+      controller.searchResults = searchQuery.searchResults
+      /* Set the size and position of the new VC  - SearchViewController's view is the superview thus the frame of the landscape must be set equal to the SearchViewController's bounds */
+      controller.view.frame = view.bounds
+      /* Make the view completely transparent as the screen begins rotating */
+      controller.view.alpha = 0
+      /* Add the landscape controller's view as a subview - this places it on top of table view, search bar and segmented control */
+      view.addSubview(controller.view)
+      /* Tell SearchViewController that the LandscapeViewController is now managing that part of the screen */
+      addChildViewController(controller)
+      
+      coordinator.animate(alongsideTransition: { _ in
+        controller.view.alpha = 1
+        self.searchBar.resignFirstResponder()
+        /* Dismiss the detail pop-up (if there is one present) as the screen rotates towards landscape */
+        if self.presentedViewController != nil {
+          self.dismiss(animated: true, completion: nil)
+        }
+      },
+                          completion: { _ in
+        /* Tell the new view controller that it now has a parent view controller */
+        controller.didMove(toParentViewController: self)
+      })
+    }
+  }
+  
+  // MARK: hideLandscape(with:) - flip back to portrait
+  func hideLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
+    
+    if let controller = landscapeViewController {
+      /* The inverse operations of embedding the child view controller (LandscapeViewController) */
+      controller.willMove(toParentViewController: self)
+      
+      coordinator.animate(alongsideTransition: { _ in
+        controller.view.alpha = 0
+      },
+                          completion: { _ in
+          controller.view.removeFromSuperview()
+          controller.removeFromParentViewController()
+          self.landscapeViewController = nil
+      })
     }
   }
 }

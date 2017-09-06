@@ -14,18 +14,33 @@ class ArtistDetailViewController: UIViewController {
   @IBOutlet weak var artworkImageView: UIImageView!
   @IBOutlet weak var artistNameLabel: UILabel!
   @IBOutlet weak var numberOfFollowersLabel: UILabel!
-  @IBOutlet weak var genresLabel: UILabel!
+  @IBOutlet weak var genreLabel: UILabel!
   @IBOutlet weak var takeMeToSpotify: UIButton!
   
+  enum AnimationStyle {
+    case slide
+    case fade
+  }
+  
+  var dismissAnimationStyle = AnimationStyle.fade
   var searchResult: SearchResult!
   private var downloadTask: URLSessionDownloadTask?
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.tintColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 1)
-
+    view.backgroundColor = UIColor.clear
+    
     popupView.layer.cornerRadius = 10
     
+    /* Customize UIButton */
+    takeMeToSpotify.layer.cornerRadius = 20
+    takeMeToSpotify.layer.masksToBounds = true
+    takeMeToSpotify.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.3)
+    takeMeToSpotify.setBackgroundColor(color: .init(red: 10/255, green: 150/255, blue: 255/255, alpha: 1),
+                                       for: .highlighted)
+    
+    /* Gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
     let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(close))
     gestureRecognizer.cancelsTouchesInView = false
     gestureRecognizer.delegate = self
@@ -35,7 +50,7 @@ class ArtistDetailViewController: UIViewController {
       updateUI()
     }
   }
-
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
@@ -53,6 +68,7 @@ class ArtistDetailViewController: UIViewController {
   }
   
   @IBAction func close() {
+    dismissAnimationStyle = .slide
     dismiss(animated: true, completion: nil)
   }
   
@@ -67,9 +83,9 @@ class ArtistDetailViewController: UIViewController {
     numberOfFollowersLabel.text = "\(searchResult.followers)"
     
     if searchResult.genres.isEmpty {
-      genresLabel.text = "Unknown"
+      genreLabel.text = "Unknown"
     } else {
-      genresLabel.text = String(format: "%@", searchResult.genres.first!).uppercased()
+      genreLabel.text = String(format: "%@", searchResult.genres.first!).capitalized
     }
     
     if let imageURL = URL(string: searchResult.largeImageURL) {
@@ -87,6 +103,24 @@ extension ArtistDetailViewController: UIViewControllerTransitioningDelegate {
                               source: UIViewController) -> UIPresentationController? {
     return DimmingPresentationController(presentedViewController: presented, presenting: presenting)
   }
+  
+  /* Present the transition animator object */
+  func animationController(forPresented presented: UIViewController,
+                           presenting: UIViewController,
+                           source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return BounceAnimationController()
+  }
+  
+  /* Present the transition animator object when dismissing the vc */
+  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    
+    switch dismissAnimationStyle {
+    case .slide:
+      return SlideOutAnimationController()
+    case .fade:
+      return FadeOutAnimationController()
+    }
+  }
 }
 
 // MARK: UIGestureRecognizerDelegate
@@ -98,6 +132,7 @@ extension ArtistDetailViewController: UIGestureRecognizerDelegate {
     return (touch.view === self.view)
   }
 }
+
 
 
 

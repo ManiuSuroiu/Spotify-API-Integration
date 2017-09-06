@@ -20,6 +20,15 @@ class TrackDetailViewController: UIViewController {
   @IBOutlet weak var popularityValueLabel: UILabel!
   @IBOutlet weak var playButton: UIButton!
   
+  /* Enum containing the two types of animation */
+  enum AnimationStyle {
+    case slide
+    case fade
+  }
+  
+  /* Needed to determine which animation is chosen. By default it is .fade - the one used when rotating to landscape */
+  var dismissAnimationStyle = AnimationStyle.fade
+  
   /* Reference needed to populate the UI */
   var searchResult: SearchResult!
   
@@ -29,16 +38,33 @@ class TrackDetailViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     view.tintColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 1)
+    view.backgroundColor = UIColor.clear
     
     /* Makes the corners of the view rounded */
     popupView.layer.cornerRadius = 10
     
-    /* Make the gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
+    // MARK: UIButton customization
+    
+    /* Make its corners rounded */
+    playButton.layer.cornerRadius = 10
+    
+    /* Make the background image created for the highlighted state of the button take the same shape as the button (round corners) */
+    playButton.layer.masksToBounds = true
+    
+    /* Set the background color in its default state */
+    playButton.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.3)
+    
+    /* Set the background color in its highlighted state using the UIButton extension */
+    playButton.setBackgroundColor(color: .init(red: 10/255, green: 150/255, blue: 255/255, alpha: 1),
+                                  for: .highlighted)
+    
+    /* Gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
     let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(close))
     gestureRecognizer.cancelsTouchesInView = false
     gestureRecognizer.delegate = self
     view.addGestureRecognizer(gestureRecognizer)
     
+    /* Optional-bind the searchResult, if not nil (the SearchResult has been successfuly populated with parsed JSON) update the UI */
     if let _ = searchResult {
       updateUI()
     }
@@ -55,6 +81,7 @@ class TrackDetailViewController: UIViewController {
   }
   
   @IBAction func close() {
+    dismissAnimationStyle = .slide
     dismiss(animated: true, completion: nil)
   }
   
@@ -111,11 +138,29 @@ class TrackDetailViewController: UIViewController {
 
 extension TrackDetailViewController: UIViewControllerTransitioningDelegate {
   
-  /* The transition from SearchViewController to DetailViewController will be performed by the DimmingViewController rather than a standard presentation controller */
+  /* The transition from SearchViewController to TrackDetailViewController will be performed by the DimmingViewController rather than a standard presentation controller */
   func presentationController(forPresented presented: UIViewController,
                               presenting: UIViewController?,
                               source: UIViewController) -> UIPresentationController? {
     return DimmingPresentationController(presentedViewController: presented, presenting: presenting)
+  }
+  
+  /* Present the transition animator object when presenting the vc */
+  func animationController(forPresented presented: UIViewController,
+                           presenting: UIViewController,
+                           source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return BounceAnimationController()
+  }
+  
+  /* Present the transition animator object when dismissing the vc */
+  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    
+    switch dismissAnimationStyle {
+    case .slide:
+      return SlideOutAnimationController()
+    case .fade:
+      return FadeOutAnimationController()
+    }
   }
 }
 

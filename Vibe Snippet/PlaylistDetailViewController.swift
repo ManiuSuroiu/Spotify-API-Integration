@@ -17,15 +17,30 @@ class PlaylistDetailViewController: UIViewController {
   @IBOutlet weak var playlistOwnerNameLabel: UILabel!
   @IBOutlet weak var takeMeToSpotify: UIButton!
   
+  enum AnimationStyle {
+    case fade
+    case slide
+  }
+  
+  var dismissedAnimationStyle = AnimationStyle.fade
   var searchResult: SearchResult!
   var downloadTask: URLSessionDownloadTask?
   
   override func viewDidLoad() {
     super.viewDidLoad()
     view.tintColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 1)
-
+    view.backgroundColor = UIColor.clear
+    
     popupView.layer.cornerRadius = 10
     
+    /* Customize UIButton */
+    takeMeToSpotify.layer.cornerRadius = 20
+    takeMeToSpotify.layer.masksToBounds = true
+    takeMeToSpotify.backgroundColor = UIColor(red: 10/255, green: 150/255, blue: 255/255, alpha: 0.3)
+    takeMeToSpotify.setBackgroundColor(color: .init(red: 10/255, green: 150/255, blue: 255/255, alpha: 1),
+                                       for: .highlighted)
+    
+    /* Gesture recognizer that listens to taps inside the view controller and calls the close() method in response */
     let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(close))
     gestureRecognizer.cancelsTouchesInView = false
     gestureRecognizer.delegate = self
@@ -53,6 +68,7 @@ class PlaylistDetailViewController: UIViewController {
   }
   
   @IBAction func close() {
+    dismissedAnimationStyle = .slide
     dismiss(animated: true, completion: nil)
   }
   
@@ -65,7 +81,12 @@ class PlaylistDetailViewController: UIViewController {
   func updateUI() {
     playlistNameLabel.text = searchResult.playlistName
     tracksNumberLabel.text = "\(searchResult.numberOfTracks)"
-    playlistOwnerNameLabel.text = searchResult.playlistOwner
+    
+    if searchResult.playlistOwner.isEmpty {
+      playlistOwnerNameLabel.text = "Unknown"
+    } else {
+      playlistOwnerNameLabel.text = searchResult.playlistOwner
+    }
     
     if let imageURL = URL(string: searchResult.largeImageURL) {
       downloadTask = artworkImageView.loadImage(url: imageURL)
@@ -81,6 +102,24 @@ extension PlaylistDetailViewController: UIViewControllerTransitioningDelegate {
                               presenting: UIViewController?,
                               source: UIViewController) -> UIPresentationController? {
     return DimmingPresentationController(presentedViewController: presented, presenting: presenting)
+  }
+  
+  /* Present the transition animator object */
+  func animationController(forPresented presented: UIViewController,
+                           presenting: UIViewController,
+                           source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    return BounceAnimationController()
+  }
+  
+  /* Present the transition animator object when dismissing the vc */
+  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    
+    switch dismissedAnimationStyle {
+    case .fade:
+      return FadeOutAnimationController()
+    case .slide:
+      return SlideOutAnimationController()
+    }
   }
 }
 

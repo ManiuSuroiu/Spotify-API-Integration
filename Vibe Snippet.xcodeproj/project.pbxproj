@@ -32,6 +32,7 @@
 		8BEFD2881F248D0900685C52 /* SearchResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BEFD2871F248D0900685C52 /* SearchResultCell.xib */; };
 		8BEFD28A1F24954C00685C52 /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEFD2891F24954C00685C52 /* SearchResultCell.swift */; };
 		8BEFD28C1F24A11A00685C52 /* NothingFoundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BEFD28B1F24A11A00685C52 /* NothingFoundCell.xib */; };
+		8BFD7E4E1F5F326600615EB0 /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFD7E4D1F5F326600615EB0 /* UIImage+Resize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		8BEFD2871F248D0900685C52 /* SearchResultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultCell.xib; sourceTree = "<group>"; };
 		8BEFD2891F24954C00685C52 /* SearchResultCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		8BEFD28B1F24A11A00685C52 /* NothingFoundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NothingFoundCell.xib; sourceTree = "<group>"; };
+		8BFD7E4D1F5F326600615EB0 /* UIImage+Resize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 				8B804EB21F588ECF00124C3D /* BounceAnimationController.swift */,
 				8B804EB41F589B9C00124C3D /* SlideOutAnimationController.swift */,
 				8B804EB81F59BC2B00124C3D /* FadeOutAnimationController.swift */,
+				8BFD7E4D1F5F326600615EB0 /* UIImage+Resize.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				8B97C14C1F3117D40083896C /* UIImageView+DownloadImage.swift in Sources */,
 				8B804EB71F5973BE00124C3D /* LandscapeViewController.swift in Sources */,
 				8B77C4161F40AB4500152DA8 /* PlaylistDetailViewController.swift in Sources */,
+				8BFD7E4E1F5F326600615EB0 /* UIImage+Resize.swift in Sources */,
 				8B804EB31F588ECF00124C3D /* BounceAnimationController.swift in Sources */,
 				8BEFD2861F23D11800685C52 /* SearchResult.swift in Sources */,
 				8BEFD28A1F24954C00685C52 /* SearchResultCell.swift in Sources */,

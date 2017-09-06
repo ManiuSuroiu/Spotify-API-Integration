@@ -13,8 +13,9 @@ class LandscapeViewController: UIViewController {
   @IBOutlet weak var scrollView: UIScrollView!
   @IBOutlet weak var pageControl: UIPageControl!
   
-  var searchResults = [SearchResult]()
+  var searchQuery: SearchQuery!
   private var firstTime = true
+  private var downloadTasks = [URLSessionDownloadTask]()
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -43,7 +44,7 @@ class LandscapeViewController: UIViewController {
     
     if firstTime {
       firstTime = false
-      tileButtons(searchResults)
+      tileButtons(searchQuery.searchResults)
     }
   }
 
@@ -54,6 +55,9 @@ class LandscapeViewController: UIViewController {
   
   deinit {
     print("deinit \(self)")
+    for task in downloadTasks {
+      task.cancel()
+    }
   }
   
   private func tileButtons(_ searchResults: [SearchResult]) {
@@ -91,10 +95,12 @@ class LandscapeViewController: UIViewController {
     var column = 0
     var x = marginX
     
-    for (index, searchResult) in searchResults.enumerated() {
-      let button = UIButton(type: .system)
-      button.backgroundColor = UIColor.white
-      button.setTitle("\(index)", for: .normal)
+    for (_, searchResult) in searchResults.enumerated() {
+      
+      let button = UIButton(type: .custom)
+      button.setBackgroundImage(UIImage(named: "LandscapeButton"), for: .normal)
+      
+      downloadImage(for: searchResult, andPlaceOn: button)
       
       button.frame = CGRect(x: x + paddingHorz,
                             y: marginY + CGFloat(row) * itemHeight + paddingVert,
@@ -128,7 +134,28 @@ class LandscapeViewController: UIViewController {
       self.scrollView.contentOffset = CGPoint(x: self.scrollView.bounds.size.width * CGFloat(sender.currentPage),
                                               y: 0)
     }, completion: nil)
-    
+  }
+  
+  private func downloadImage(for searchResult: SearchResult, andPlaceOn button: UIButton) {
+    if let url = URL(string: searchResult.smallImageURL) {
+      let downloadTask = URLSession.shared.downloadTask(with: url) { [weak button] url, response, error in
+        if error == nil,
+          let url = url,
+          let data = try? Data(contentsOf: url),
+          let image = UIImage(data: data) {
+          
+          let newImage = image.resizedImage()
+          
+          DispatchQueue.main.async {
+            if let button = button {
+              button.setImage(newImage, for: .normal)
+            }
+          }
+        }
+      }
+      downloadTask.resume()
+      downloadTasks.append(downloadTask)
+    }
   }
 }
 
@@ -139,6 +166,7 @@ extension LandscapeViewController: UIScrollViewDelegate {
     pageControl.currentPage = currentPage
   }
 }
+
 
 
 
